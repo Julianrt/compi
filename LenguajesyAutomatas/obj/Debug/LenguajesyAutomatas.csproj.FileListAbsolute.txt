@@ -1,0 +1,99 @@
+C:\Users\Eduardo Tapia\Desktop\ITH\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.exe.config
+C:\Users\Eduardo Tapia\Desktop\ITH\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.exe
+C:\Users\Eduardo Tapia\Desktop\ITH\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.pdb
+C:\Users\Eduardo Tapia\Desktop\ITH\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.Properties.Resources.resources
+C:\Users\Eduardo Tapia\Desktop\ITH\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csproj.GenerateResource.cache
+C:\Users\Eduardo Tapia\Desktop\ITH\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csproj.CoreCompileInputs.cache
+C:\Users\Eduardo Tapia\Desktop\ITH\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.exe
+C:\Users\Eduardo Tapia\Desktop\ITH\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.pdb
+C:\Users\Eduardo Tapia\Desktop\ITH\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.EditorTexto.resources
+C:\Users\Eduardo Tapia\Desktop\ITH\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.frmEditor.resources
+C:\Users\Eduardo Tapia\Desktop\ITH\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csprojAssemblyReference.cache
+D:\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.exe.config
+D:\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.exe
+D:\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.pdb
+D:\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csprojAssemblyReference.cache
+D:\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.EditorTexto.resources
+D:\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.frmEditor.resources
+D:\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.Properties.Resources.resources
+D:\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csproj.GenerateResource.cache
+D:\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csproj.CoreCompileInputs.cache
+D:\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.exe
+D:\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.pdb
+H:\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.exe.config
+H:\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.exe
+H:\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.pdb
+H:\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csprojResolveAssemblyReference.cache
+H:\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.EditorTexto.resources
+H:\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.frmEditor.resources
+H:\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.Properties.Resources.resources
+H:\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csproj.GenerateResource.Cache
+H:\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csproj.CoreCompileInputs.cache
+H:\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.exe
+H:\LENGUAJES Y AUTOMATAS 1\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.pdb
+C:\Users\Eduardo\Desktop\LenguajesyAutomatas\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.exe.config
+C:\Users\Eduardo\Desktop\LenguajesyAutomatas\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.exe
+C:\Users\Eduardo\Desktop\LenguajesyAutomatas\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.pdb
+C:\Users\Eduardo\Desktop\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csprojAssemblyReference.cache
+C:\Users\Eduardo\Desktop\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.EditorTexto.resources
+C:\Users\Eduardo\Desktop\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.frmEditor.resources
+C:\Users\Eduardo\Desktop\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.Properties.Resources.resources
+C:\Users\Eduardo\Desktop\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csproj.GenerateResource.cache
+C:\Users\Eduardo\Desktop\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csproj.CoreCompileInputs.cache
+C:\Users\Eduardo\Desktop\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.exe
+C:\Users\Eduardo\Desktop\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.pdb
+C:\Users\Karen Reyes\Documents\Documents\KAREN REYES\9no\COMPI\COMPILALOR\LenguajesyAutomatas\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.exe.config
+C:\Users\Karen Reyes\Documents\Documents\KAREN REYES\9no\COMPI\COMPILALOR\LenguajesyAutomatas\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.exe
+C:\Users\Karen Reyes\Documents\Documents\KAREN REYES\9no\COMPI\COMPILALOR\LenguajesyAutomatas\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.pdb
+C:\Users\Karen Reyes\Documents\Documents\KAREN REYES\9no\COMPI\COMPILALOR\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csprojAssemblyReference.cache
+C:\Users\Karen Reyes\Documents\Documents\KAREN REYES\9no\COMPI\COMPILALOR\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.EditorTexto.resources
+C:\Users\Karen Reyes\Documents\Documents\KAREN REYES\9no\COMPI\COMPILALOR\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.frmEditor.resources
+C:\Users\Karen Reyes\Documents\Documents\KAREN REYES\9no\COMPI\COMPILALOR\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.Properties.Resources.resources
+C:\Users\Karen Reyes\Documents\Documents\KAREN REYES\9no\COMPI\COMPILALOR\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csproj.GenerateResource.cache
+C:\Users\Karen Reyes\Documents\Documents\KAREN REYES\9no\COMPI\COMPILALOR\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csproj.CoreCompileInputs.cache
+C:\Users\Karen Reyes\Documents\Documents\KAREN REYES\9no\COMPI\COMPILALOR\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.exe
+C:\Users\Karen Reyes\Documents\Documents\KAREN REYES\9no\COMPI\COMPILALOR\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.pdb
+C:\Users\ahora\Desktop\verano compi\compilador_python-master\LenguajesyAutomatas\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.exe.config
+C:\Users\ahora\Desktop\verano compi\compilador_python-master\LenguajesyAutomatas\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.exe
+C:\Users\ahora\Desktop\verano compi\compilador_python-master\LenguajesyAutomatas\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.pdb
+C:\Users\ahora\Desktop\verano compi\compilador_python-master\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csprojAssemblyReference.cache
+C:\Users\ahora\Desktop\verano compi\compilador_python-master\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.EditorTexto.resources
+C:\Users\ahora\Desktop\verano compi\compilador_python-master\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.frmEditor.resources
+C:\Users\ahora\Desktop\verano compi\compilador_python-master\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.Properties.Resources.resources
+C:\Users\ahora\Desktop\verano compi\compilador_python-master\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csproj.GenerateResource.cache
+C:\Users\ahora\Desktop\verano compi\compilador_python-master\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csproj.CoreCompileInputs.cache
+C:\Users\ahora\Desktop\verano compi\compilador_python-master\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.exe
+C:\Users\ahora\Desktop\verano compi\compilador_python-master\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.pdb
+C:\Users\Julián\Downloads\compiladorPython-master(mio)\LenguajesyAutomatas\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.exe.config
+C:\Users\Julián\Downloads\compiladorPython-master(mio)\LenguajesyAutomatas\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.exe
+C:\Users\Julián\Downloads\compiladorPython-master(mio)\LenguajesyAutomatas\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.pdb
+C:\Users\Julián\Downloads\compiladorPython-master(mio)\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csprojAssemblyReference.cache
+C:\Users\Julián\Downloads\compiladorPython-master(mio)\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.EditorTexto.resources
+C:\Users\Julián\Downloads\compiladorPython-master(mio)\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.frmEditor.resources
+C:\Users\Julián\Downloads\compiladorPython-master(mio)\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.Properties.Resources.resources
+C:\Users\Julián\Downloads\compiladorPython-master(mio)\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csproj.GenerateResource.cache
+C:\Users\Julián\Downloads\compiladorPython-master(mio)\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csproj.CoreCompileInputs.cache
+C:\Users\Julián\Downloads\compiladorPython-master(mio)\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.exe
+C:\Users\Julián\Downloads\compiladorPython-master(mio)\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.pdb
+C:\Users\Julián\Documents\LenguajesyAutomatas\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.exe.config
+C:\Users\Julián\Documents\LenguajesyAutomatas\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.exe
+C:\Users\Julián\Documents\LenguajesyAutomatas\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.pdb
+C:\Users\Julián\Documents\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csprojAssemblyReference.cache
+C:\Users\Julián\Documents\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.EditorTexto.resources
+C:\Users\Julián\Documents\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.frmEditor.resources
+C:\Users\Julián\Documents\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.Properties.Resources.resources
+C:\Users\Julián\Documents\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csproj.GenerateResource.cache
+C:\Users\Julián\Documents\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csproj.CoreCompileInputs.cache
+C:\Users\Julián\Documents\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.exe
+C:\Users\Julián\Documents\LenguajesyAutomatas\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.pdb
+C:\Users\isaac\Desktop\Compi_Python\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.exe.config
+C:\Users\isaac\Desktop\Compi_Python\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.exe
+C:\Users\isaac\Desktop\Compi_Python\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.pdb
+C:\Users\isaac\Desktop\Compi_Python\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csprojAssemblyReference.cache
+C:\Users\isaac\Desktop\Compi_Python\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.EditorTexto.resources
+C:\Users\isaac\Desktop\Compi_Python\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.frmEditor.resources
+C:\Users\isaac\Desktop\Compi_Python\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.Properties.Resources.resources
+C:\Users\isaac\Desktop\Compi_Python\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csproj.GenerateResource.cache
+C:\Users\isaac\Desktop\Compi_Python\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csproj.CoreCompileInputs.cache
+C:\Users\isaac\Desktop\Compi_Python\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.exe
+C:\Users\isaac\Desktop\Compi_Python\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.pdb
