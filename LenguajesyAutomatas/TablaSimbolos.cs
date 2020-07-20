@@ -71,7 +71,7 @@ namespace LenguajesyAutomatas
 
             set
             {
-                lexema = value;
+                lexema = value; 
             }
         }
         public NodoClase Herencia
@@ -191,6 +191,13 @@ namespace LenguajesyAutomatas
                 throw new Exception("Error Semantico: No existe el nombre de Clase");
         }
 
+        public NodoMetodo ObtenerNodoMetodo(NodoClase _clase, string _idMetodo)
+        {
+            if (_clase.TablaSimbolosAtributos.ContainsKey(_idMetodo))
+                return _clase.TablaSimbolosMetodos.SingleOrDefault(x => x.Key.ToString() == _idMetodo).Value;
+            else
+                throw new Exception("Error Semantico: No existe el nombre del metodo");
+        }
         public static Estado InsertarNodoClase(NodoClase miNodoClase)
         {
             if (!TablaSimbolosClase.ContainsKey(miNodoClase.Lexema))
@@ -284,6 +291,27 @@ namespace LenguajesyAutomatas
         #endregion
 
         #region Metodos TS Metodos
+        public Estado InsertarMetodo(NodoMetodo _nuevometodo)
+        {
+            if (tablaSimbolosClase.ContainsKey(claseActual.Lexema))
+            {
+                if (!claseActual.TablaSimbolosMetodos.ContainsKey(_nuevometodo.lexema))
+                {
+                    claseActual.TablaSimbolosMetodos.Add(_nuevometodo.lexema, _nuevometodo);
+                    tablaSimbolosClase.Remove(claseActual.Lexema);
+                    InsertarNodoClase(claseActual);
+                    return Estado.Insertado;
+                }
+                else
+                {
+                    return Estado.Duplicado;
+                }
+            }
+            else
+            {
+                throw new Exception("Error Semantico: No existe el nombre de Clase");
+            }
+        }
 
         #endregion
 

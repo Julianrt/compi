@@ -73,7 +73,7 @@ namespace LenguajesyAutomatas
 
 
       };
-
+        TablaSimbolos ts = new TablaSimbolos();
         public int[,] RepositorioReglas = new int[,]
         {
             /*	0	*/	/*	<	S	>	*/	{   1001   ,   -999    ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0  ,   0  },
@@ -294,7 +294,6 @@ namespace LenguajesyAutomatas
 
                     case 13: //HERENCIA
                         _lexema = listaLexemas[puntero];
-                        TablaSimbolos ts = new TablaSimbolos();
                         var estado = ts.InsertarHerencia(nodoClase, _lexema);
                         break;
 
@@ -304,7 +303,13 @@ namespace LenguajesyAutomatas
                         break;
                     case 20: //METODO
                         _lexema = listaLexemas[puntero + 1];
-                        MessageBox.Show(_lexema);
+                        int _lineaMetodo =_lexema[puntero + 1];
+                        ts.metodoActual = new NodoMetodo()
+                        {
+                            lexema = _lexema + "*" + _lineaMetodo.ToString(),
+                            linea = _lineaMetodo
+                        };
+                        MessageBox.Show("Metodo " + ts.metodoActual.lexema + ": " + ts.InsertarMetodo(ts.metodoActual).ToString());
                         break;
                     case 46: //PARAMETROS
                         _lexema = listaLexemas[puntero + 1];

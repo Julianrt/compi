@@ -97,3 +97,14 @@ C:\Users\isaac\Desktop\Compi_Python\LenguajesyAutomatas\obj\Debug\LenguajesyAuto
 C:\Users\isaac\Desktop\Compi_Python\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csproj.CoreCompileInputs.cache
 C:\Users\isaac\Desktop\Compi_Python\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.exe
 C:\Users\isaac\Desktop\Compi_Python\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.pdb
+C:\Users\ahora\Desktop\verano compi\git\compi\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.exe.config
+C:\Users\ahora\Desktop\verano compi\git\compi\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.exe
+C:\Users\ahora\Desktop\verano compi\git\compi\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.pdb
+C:\Users\ahora\Desktop\verano compi\git\compi\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csprojAssemblyReference.cache
+C:\Users\ahora\Desktop\verano compi\git\compi\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.EditorTexto.resources
+C:\Users\ahora\Desktop\verano compi\git\compi\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.frmEditor.resources
+C:\Users\ahora\Desktop\verano compi\git\compi\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.Properties.Resources.resources
+C:\Users\ahora\Desktop\verano compi\git\compi\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csproj.GenerateResource.cache
+C:\Users\ahora\Desktop\verano compi\git\compi\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csproj.CoreCompileInputs.cache
+C:\Users\ahora\Desktop\verano compi\git\compi\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.exe
+C:\Users\ahora\Desktop\verano compi\git\compi\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.pdb
