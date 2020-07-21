@@ -136,7 +136,59 @@ namespace LenguajesyAutomatas
         }
     }
     public class NodoAtributo {
-        public string lexema;
+        private string lexema;
+        private TipoDeDato tipoDato;
+        private string valor;
+        private int renglonDeclaracion;
+
+        public string Lexema
+        {
+            get
+            {
+                return lexema;
+            }
+
+            set
+            {
+                lexema = value;
+            }
+        }
+        public TipoDeDato TipoDato
+        {
+            get
+            {
+                return tipoDato;
+            }
+
+            set
+            {
+                tipoDato = value;
+            }
+        }
+        public string Valor
+        {
+            get
+            {
+                return valor;
+            }
+
+            set
+            {
+                valor = value;
+            }
+        }
+        public int RenglonDeclaracion
+        {
+            get
+            {
+                return renglonDeclaracion;
+            }
+
+            set
+            {
+                renglonDeclaracion = value;
+            }
+        }
     }
     public class NodoMetodo {
         public string lexema;
@@ -190,7 +242,6 @@ namespace LenguajesyAutomatas
             else
                 throw new Exception("Error Semantico: No existe el nombre de Clase");
         }
-
         public NodoMetodo ObtenerNodoMetodo(NodoClase _clase, string _idMetodo)
         {
             if (_clase.TablaSimbolosAtributos.ContainsKey(_idMetodo))
@@ -211,7 +262,6 @@ namespace LenguajesyAutomatas
                 return Estado.Duplicado;
             }
         }
-
         public Estado InsertarHerencia(NodoClase nodoClase, string _herencia)
         {
             claseActual = nodoClase;
@@ -241,7 +291,6 @@ namespace LenguajesyAutomatas
                 return Estado.NoExisteClase;
             }
         }
-
         public bool eliminarNodoClase(string _lexema)
         {
             if (tablaSimbolosClase.ContainsKey(_lexema))
@@ -256,13 +305,13 @@ namespace LenguajesyAutomatas
         #endregion
 
         #region Metodos TS Atributos
-        public Estado InsertarNodoAtributo(NodoAtributo nodo, NodoClase nodoClaseActiva)
+        public static Estado InsertarNodoAtributo(NodoAtributo nodo, NodoClase nodoClaseActiva)
         {
-            if (nodoClaseActiva.Lexema != nodo.lexema)
+            if (nodoClaseActiva.Lexema != nodo.Lexema)
             {
-                if (!nodoClaseActiva.TablaSimbolosAtributos.ContainsKey(nodo.lexema))
+                if (!nodoClaseActiva.TablaSimbolosAtributos.ContainsKey(nodo.Lexema))
                 {
-                    nodoClaseActiva.TablaSimbolosAtributos.Add(nodo.lexema, nodo);
+                    nodoClaseActiva.TablaSimbolosAtributos.Add(nodo.Lexema, nodo);
                     return Estado.Insertado;
                 }
                 else

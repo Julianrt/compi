@@ -289,8 +289,6 @@ namespace LenguajesyAutomatas
                         nodoClase.RenglonDeclaracion = linea;
                         TablaSimbolos.InsertarNodoClase(nodoClase);
                         break;
-                        
-
 
                     case 13: //HERENCIA
                         _lexema = listaLexemas[puntero];
@@ -299,8 +297,17 @@ namespace LenguajesyAutomatas
 
                     case 19: //ATRIBUTO
                         _lexema = listaLexemas[puntero];
-                        MessageBox.Show(_lexema);
+                        NodoAtributo nodoAtributo = new NodoAtributo();
+                        nodoAtributo.Lexema = _lexema;
+                        nodoAtributo.RenglonDeclaracion = linea;
+                        TablaSimbolos.InsertarNodoAtributo(nodoAtributo, nodoClase);
+                        foreach (var nodo in nodoClase.TablaSimbolosAtributos)
+                        {
+                            MessageBox.Show(nodo.Value.Lexema+ " Renglon: " +nodo.Value.RenglonDeclaracion);
+                        }
+                        
                         break;
+
                     case 20: //METODO
                         _lexema = listaLexemas[puntero + 1];
                         int _lineaMetodo =_lexema[puntero + 1];
