@@ -146,6 +146,7 @@ namespace LenguajesyAutomatas
                         //MessageBox.Show(Convert.ToString(Tokensparasintactico[0])+" "+ Convert.ToString(Tokensparasintactico[1]));
 
                         _sin.EjecutarSintactico(Tokensparasintactico, lexemaParaSintactico, listaTablaSimbolo);
+                        dgvTablaSimbolo.DataSource = TablaSimbolos.ObtenerListaClases();
                     }
                     else
                     {

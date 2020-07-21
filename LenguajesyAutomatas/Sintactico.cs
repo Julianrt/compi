@@ -7,8 +7,22 @@ using System.Windows.Forms;
 
 namespace LenguajesyAutomatas
 {
+    public class DgvDatosTablaSimblolos 
+    {
+        private string Linea;
+        private string Identificador;
+        private string Tipo;
+        private string Herencia;
+
+        public string Linea1 { get => Linea; set => Linea = value; }
+        public string Identificador1 { get => Identificador; set => Identificador = value; }
+        public string Tipo1 { get => Tipo; set => Tipo = value; }
+        public string Herencia1 { get => Herencia; set => Herencia = value; }
+    }
+
     public class Sintactico
     {
+        public static List<DgvDatosTablaSimblolos> VisualizarDatosTablaSimbolos = new List<DgvDatosTablaSimblolos>();
        /* public Sintactico()
         {
             //                     public class x {    }
@@ -185,6 +199,7 @@ namespace LenguajesyAutomatas
 
 
         private NodoClase nodoClase;
+        private NodoMetodo nodoMetodo;
         private int linea;
 
         public void EjecutarSintactico(int [] ListaDeTokens, string[] listaDeLexemas, List<Token> listaTablaSimbolo)
@@ -257,19 +272,6 @@ namespace LenguajesyAutomatas
                 }
             } while (ListaDeTokens.Length >= puntero);
 
-            
-            foreach(var _nodoClase in TablaSimbolos.TablaSimbolosClase)
-            {
-                if (_nodoClase.Value.Herencia != null)
-                {
-                    MessageBox.Show(_nodoClase.Value.Lexema+" - "+_nodoClase.Value.Herencia.Lexema+" - "+_nodoClase.Value.RenglonDeclaracion);
-                }
-                else
-                {
-                    MessageBox.Show(_nodoClase.Value.Lexema+" - "+_nodoClase.Value.RenglonDeclaracion);
-                }
-            }
-
         }
 
         private void InsertarTablaSimbolos(int regla)
@@ -278,6 +280,7 @@ namespace LenguajesyAutomatas
             //String codigoFuente = EditorTexto.text;
             try
             {
+                
                 linea = listaTablaSimboloToken[puntero + 1].linea;
                 string _lexema;
                 switch (regla)
@@ -286,45 +289,57 @@ namespace LenguajesyAutomatas
                         _lexema = listaLexemas[puntero + 1];
                         nodoClase = new NodoClase();
                         nodoClase.Lexema = _lexema;
-                        nodoClase.RenglonDeclaracion = linea;
+                        nodoClase.LineaDeclaracion = linea;
                         TablaSimbolos.InsertarNodoClase(nodoClase);
+                        //VisualizarDatosTablaSimbolos.Add(new DgvDatosTablaSimblolos() 
+                        //{Linea1 = linea.ToString(),Identificador1 = _lexema});
                         break;
 
                     case 13: //HERENCIA
                         _lexema = listaLexemas[puntero];
-                        var estado = ts.InsertarHerencia(nodoClase, _lexema);
+                        TablaSimbolos.InsertarHerencia(nodoClase,_lexema);
                         break;
 
                     case 19: //ATRIBUTO
                         _lexema = listaLexemas[puntero];
                         NodoAtributo nodoAtributo = new NodoAtributo();
                         nodoAtributo.Lexema = _lexema;
-                        nodoAtributo.RenglonDeclaracion = linea;
+                        nodoAtributo.LineaDeclaracion = linea;
+                        //Valor y tipoDato se llena cuando está el arbol
+                        nodoAtributo.Valor = "";
+                        nodoAtributo.TipoDato = TipoDeDato.SinEspecificar;
                         TablaSimbolos.InsertarNodoAtributo(nodoAtributo, nodoClase);
-                        foreach (var nodo in nodoClase.TablaSimbolosAtributos)
-                        {
-                            MessageBox.Show(nodo.Value.Lexema+ " Renglon: " +nodo.Value.RenglonDeclaracion);
-                        }
-                        
                         break;
 
                     case 20: //METODO
                         _lexema = listaLexemas[puntero + 1];
-                        int _lineaMetodo =_lexema[puntero + 1];
-                        ts.metodoActual = new NodoMetodo()
-                        {
-                            lexema = _lexema + "*" + _lineaMetodo.ToString(),
-                            linea = _lineaMetodo
-                        };
-                        MessageBox.Show("Metodo " + ts.metodoActual.lexema + ": " + ts.InsertarMetodo(ts.metodoActual).ToString());
+                        nodoMetodo = new NodoMetodo();
+                        nodoMetodo.Lexema = _lexema;
+                        nodoMetodo.LineaDeclaracion = linea;
+                        //DESPUES ARREGLAR
+                        nodoMetodo.MiRegreso = Regreso.VOID;
+                        //int _lineaMetodo =_lexema[puntero + 1];
+                        TablaSimbolos.InsertarMetodo(nodoClase, nodoMetodo);
                         break;
+
                     case 46: //PARAMETROS
                         _lexema = listaLexemas[puntero + 1];
-                        MessageBox.Show(_lexema);
+                        NodoParametro nodoParametro = new NodoParametro();
+                        nodoParametro.Lexema = _lexema;
+                        nodoParametro.LineaDeclaracion = linea;
+                        //Se especifica con arboles
+                        nodoParametro.TipoDato = TipoDeDato.SinEspecificar;
+                        TablaSimbolos.InsertarParametro(nodoClase, nodoMetodo, nodoParametro);
                         break;
+
                     case 93: //VARIABLE
                         _lexema = listaLexemas[puntero - 1];
-                        MessageBox.Show(_lexema);
+                        NodoVariable nodoVariable = new NodoVariable();
+                        nodoVariable.Lexema = _lexema;
+                        nodoVariable.MiTipoDato = TipoDeDato.SinEspecificar;
+                        nodoVariable.MiTipoVariable = TipoDeVariable.VariableLocal;
+                        nodoVariable.LineaDeclaracion = linea;
+                        TablaSimbolos.InsertarVariable(nodoClase, nodoMetodo, nodoVariable);
                         break;
                 }
             }

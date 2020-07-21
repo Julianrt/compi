@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Markup;
 
 namespace LenguajesyAutomatas
 {
@@ -38,7 +39,6 @@ namespace LenguajesyAutomatas
         Protected,
         Sealed
     }
-
     public enum Regreso
     {
         INT,
@@ -49,14 +49,12 @@ namespace LenguajesyAutomatas
     }
 	#endregion
 
-
 	#region Nodos
-
 	public class NodoClase
     {
         private string lexema;
         private NodoClase herencia;
-        private int renglonDeclaracion;
+        private int lineaDeclaracion;
         private int[] referencias;
 
         private Dictionary<string, NodoAtributo> tablaSimbolosAtributos = new Dictionary<string, NodoAtributo>();
@@ -86,16 +84,16 @@ namespace LenguajesyAutomatas
                 herencia = value;
             }
         }
-        public int RenglonDeclaracion
+        public int LineaDeclaracion
         {
             get
             {
-                return renglonDeclaracion;
+                return lineaDeclaracion;
             }
 
             set
             {
-                renglonDeclaracion = value;
+                lineaDeclaracion = value;
             }
         }
         public int[] Referencias
@@ -139,7 +137,7 @@ namespace LenguajesyAutomatas
         private string lexema;
         private TipoDeDato tipoDato;
         private string valor;
-        private int renglonDeclaracion;
+        private int lineaDeclaracion;
 
         public string Lexema
         {
@@ -177,51 +175,116 @@ namespace LenguajesyAutomatas
                 valor = value;
             }
         }
-        public int RenglonDeclaracion
+        public int LineaDeclaracion
         {
             get
             {
-                return renglonDeclaracion;
+                return lineaDeclaracion;
             }
 
             set
             {
-                renglonDeclaracion = value;
+                lineaDeclaracion = value;
             }
         }
     }
     public class NodoMetodo {
-        public string lexema;
 
-        public int linea;
-        public Alcance miAlcance;
-        public Regreso miRegreso;
-        public Dictionary<object, NodoParametro> TablaParametro = new Dictionary<object, NodoParametro>();
-        public Dictionary<object, NodoVariable> TablaVariables = new Dictionary<object, NodoVariable>();
+        private string lexema;
+        private int linea;
+        private Regreso miRegreso;
+        private Dictionary<object, NodoParametro> tablaParametro = new Dictionary<object, NodoParametro>();
+        private Dictionary<object, NodoVariable> tablaVariables = new Dictionary<object, NodoVariable>();
+
+        public string Lexema
+        {
+            get
+            {
+                return lexema;
+            }
+            set
+            {
+                lexema = value;
+            }
+        }
+        public int LineaDeclaracion
+        {
+            get
+            {
+                return linea;
+            }
+            set
+            {
+                linea = value;
+            }
+        }
+        public Regreso MiRegreso
+        {
+            get
+            {
+                return miRegreso;
+            }
+            set
+            {
+                miRegreso = value;
+            }
+        }
+        public Dictionary<object, NodoParametro> TablaParametro
+        {
+            get
+            {
+                return tablaParametro;
+            }
+            set
+            {
+                tablaParametro = value;
+            }
+        }
+        public Dictionary<object, NodoVariable> TablaVariables
+        {
+            get
+            {
+                return tablaVariables;
+            }
+            set
+            {
+                tablaVariables = value;
+            }
+        }
     }
     public class NodoParametro {
-        public string lexema;
+        private string lexema;
+        private TipoDeDato tipoDato;
+        private int lineaDeclaracion;
+
+        public string Lexema { get => lexema; set => lexema = value; }
+        public TipoDeDato TipoDato { get => tipoDato; set => tipoDato = value; }
+        public int LineaDeclaracion { get => lineaDeclaracion; set => lineaDeclaracion = value; }
     }
     public class NodoVariable {
-        public string lexema;
-        public TipoDeDato miTipoDato;
-        public string valor;
-        public TipoDeVariable miTipoVariable;
-        public int reglonDec;
-        public int[] referencias;
-        public int lineaDeclaracion;
-    }
+        private string lexema;
+        private TipoDeDato miTipoDato;
+        private string valor;
+        private TipoDeVariable miTipoVariable;
+        private int[] referencias;
+        private int lineaDeclaracion;
 
+        public string Lexema { get => lexema; set => lexema = value; }
+        public TipoDeDato MiTipoDato { get => miTipoDato; set => miTipoDato = value; }
+        public string Valor { get => valor; set => valor = value; }
+        public TipoDeVariable MiTipoVariable { get => miTipoVariable; set => miTipoVariable = value; }
+        public int[] Referencias { get => referencias; set => referencias = value; }
+        public int LineaDeclaracion { get => lineaDeclaracion; set => lineaDeclaracion = value; }
+    }
 	#endregion
 
 	public class TablaSimbolos
     {
-        public NodoClase claseActual = new NodoClase();
+        public NodoClase nodoClase = new NodoClase();
 
         public NodoMetodo metodoActual = new NodoMetodo();
 
         private static Dictionary<string, NodoClase> tablaSimbolosClase = new Dictionary<string, NodoClase>();
-		#region Metodos TS Clase
 		public static Dictionary<string, NodoClase> TablaSimbolosClase
         {
             get
@@ -234,20 +297,14 @@ namespace LenguajesyAutomatas
                 tablaSimbolosClase = value;
             }
         }
-
+		
+        #region Metodos TS Clase
         public NodoClase ObtenerNodoClase(string lexema)
         {
             if (tablaSimbolosClase.ContainsKey(lexema))
                 return tablaSimbolosClase.SingleOrDefault(x => x.Key.ToString() == lexema).Value;
             else
                 throw new Exception("Error Semantico: No existe el nombre de Clase");
-        }
-        public NodoMetodo ObtenerNodoMetodo(NodoClase _clase, string _idMetodo)
-        {
-            if (_clase.TablaSimbolosAtributos.ContainsKey(_idMetodo))
-                return _clase.TablaSimbolosMetodos.SingleOrDefault(x => x.Key.ToString() == _idMetodo).Value;
-            else
-                throw new Exception("Error Semantico: No existe el nombre del metodo");
         }
         public static Estado InsertarNodoClase(NodoClase miNodoClase)
         {
@@ -262,23 +319,23 @@ namespace LenguajesyAutomatas
                 return Estado.Duplicado;
             }
         }
-        public Estado InsertarHerencia(NodoClase nodoClase, string _herencia)
+        public static Estado InsertarHerencia(NodoClase nodoClase, string _herencia)
         {
-            claseActual = nodoClase;
-            NodoClase _herenciaInsertar = ObtenerNodoClase(_herencia);
+            TablaSimbolos ts = new TablaSimbolos();
+            NodoClase _herenciaInsertar = ts.ObtenerNodoClase(_herencia);
             if (_herenciaInsertar.Lexema != null)
             {
-                claseActual.Herencia = _herenciaInsertar;
+                nodoClase.Herencia = _herenciaInsertar;
 
                 //claseActual.Herencia.Lexema = _herenciaInsertar.Lexema;
                 //claseActual.Herencia.Herencia = _herenciaInsertar.Herencia;
                 //claseActual.Herencia.TablaSimbolosAtributos = _herenciaInsertar.TablaSimbolosAtributos;
                 //claseActual.Herencia.TablaSimbolosMetodos = _herenciaInsertar.TablaSimbolosMetodos;
 
-                if (tablaSimbolosClase.ContainsKey(claseActual.Lexema))
+                if (tablaSimbolosClase.ContainsKey(nodoClase.Lexema))
                 {
-                    tablaSimbolosClase.Remove(claseActual.Lexema);
-                    InsertarNodoClase(claseActual);
+                    tablaSimbolosClase.Remove(nodoClase.Lexema);
+                    InsertarNodoClase(nodoClase);
                     return Estado.Insertado;
                 }
                 else
@@ -340,13 +397,13 @@ namespace LenguajesyAutomatas
         #endregion
 
         #region Metodos TS Metodos
-        public Estado InsertarMetodo(NodoMetodo _nuevometodo)
+        public static Estado InsertarMetodo(NodoClase claseActual,  NodoMetodo _nuevometodo)
         {
             if (tablaSimbolosClase.ContainsKey(claseActual.Lexema))
             {
-                if (!claseActual.TablaSimbolosMetodos.ContainsKey(_nuevometodo.lexema))
+                if (!claseActual.TablaSimbolosMetodos.ContainsKey(_nuevometodo.Lexema))
                 {
-                    claseActual.TablaSimbolosMetodos.Add(_nuevometodo.lexema, _nuevometodo);
+                    claseActual.TablaSimbolosMetodos.Add(_nuevometodo.Lexema, _nuevometodo);
                     tablaSimbolosClase.Remove(claseActual.Lexema);
                     InsertarNodoClase(claseActual);
                     return Estado.Insertado;
@@ -361,12 +418,245 @@ namespace LenguajesyAutomatas
                 throw new Exception("Error Semantico: No existe el nombre de Clase");
             }
         }
+        public NodoMetodo ObtenerNodoMetodo(NodoClase _clase, string _idMetodo)
+        {
+            if (_clase.TablaSimbolosMetodos.ContainsKey(_idMetodo))
+                return _clase.TablaSimbolosMetodos.SingleOrDefault(x => x.Key.ToString() == _idMetodo).Value;
+            else
+                throw new Exception("Error Semantico: No existe el nombre del metodo");
+        }
+        #endregion
 
+        #region Metodos Parametros
+        public static Estado InsertarParametro(NodoClase nodoClase, NodoMetodo nodoMetodo, NodoParametro nodoParametro)
+        {
+            if (TablaSimbolosClase.ContainsKey(nodoClase.Lexema)){
+                if (nodoClase.TablaSimbolosMetodos.ContainsKey(nodoMetodo.Lexema))
+                {
+                    if ( !nodoMetodo.TablaParametro.ContainsKey(nodoParametro.Lexema) )
+                    {
+                        nodoMetodo.TablaParametro.Add(nodoParametro.Lexema, nodoParametro);
+                        return Estado.Insertado;
+                    }
+                    else
+                    {
+                        return Estado.Duplicado;
+                    }
+                }
+                else
+                {
+                    throw new Exception("Error Semantico: No existe el nombre del Metodo");
+                }
+            }
+            else
+            {
+                throw new Exception("Error Semantico: No existe el nombre de Clase");
+            }
+        }
+        public NodoParametro ObtenerNodoParametro(NodoClase nodoClase, NodoMetodo nodoMetodo, string lexemaParametro)
+        {
+            if (nodoClase.TablaSimbolosMetodos.ContainsKey(nodoMetodo.Lexema))
+            {
+                if (nodoMetodo.TablaParametro.ContainsKey(lexemaParametro))
+                {
+                    return nodoMetodo.TablaParametro.SingleOrDefault(x => x.Key.ToString() == lexemaParametro).Value;
+                }
+                else
+                {
+                    throw new Exception("Error Semantico: No existe el nombre del parametro");
+                }
+            }
+            else
+            {
+                throw new Exception("Error Semantico: No existe el nombre del metodo");
+            }
+        }
         #endregion
 
         #region Metodos Variables
-
+        public static Estado InsertarVariable(NodoClase nodoClase, NodoMetodo nodoMetodo, NodoVariable nodoVariable)
+        {
+            if ( TablaSimbolosClase.ContainsKey(nodoClase.Lexema))
+            {
+                if (nodoClase.TablaSimbolosMetodos.ContainsKey(nodoMetodo.Lexema))
+                {
+                    if ( nodoMetodo.TablaParametro.ContainsKey(nodoVariable.Lexema))
+                    {
+                        throw new Exception("Error Semantico: Ya existe un parametro con el identificador "+nodoVariable.Lexema);
+                    }
+                    if (!nodoMetodo.TablaVariables.ContainsKey(nodoVariable.Lexema))
+                    {
+                        nodoMetodo.TablaVariables.Add(nodoVariable.Lexema, nodoVariable);
+                        return Estado.Insertado;
+                    }
+                    else
+                    {
+                        return Estado.Duplicado;
+                    }
+                }
+                else
+                {
+                    throw new Exception("Error Semantico: No existe el nombre del Metodo");
+                }
+            }
+            else
+            {
+                throw new Exception("Error Semantico: No existe el nombre de Clase");
+            }
+        }
+        public NodoVariable ObtenerNodoVariable(NodoClase nodoClase, NodoMetodo nodoMetodo, string lexemaVariable)
+        {
+            if ( TablaSimbolosClase.ContainsKey(nodoClase.Lexema))
+            {
+                if ( nodoClase.TablaSimbolosMetodos.ContainsKey(nodoMetodo.Lexema))
+                {
+                    if ( nodoMetodo.TablaVariables.ContainsKey(lexemaVariable))
+                    {
+                        return nodoMetodo.TablaVariables.SingleOrDefault(x => x.Key.ToString() == lexemaVariable).Value;
+                    }
+                    else
+                    {
+                        throw new Exception("Error Semantico: No existe el nombre de Variable");
+                    }
+                }
+                else
+                {
+                    throw new Exception("Error Semantico: No existe el nombre del Metodo");
+                }
+            }
+            else
+            {
+                throw new Exception("Error Semantico: No existe el nombre de Clase");
+            }
+        }
         #endregion
 
+        public static List<TSMostrar> ObtenerListaClases()
+        {
+            List<TSMostrar> listaClases = new List<TSMostrar>();
+            foreach(var nodoClase in TablaSimbolos.TablaSimbolosClase)
+            {
+                TSMostrar clase = new TSMostrar();
+                clase.Lexema = nodoClase.Value.Lexema;
+                if (nodoClase.Value.Herencia != null)
+                    clase.Herencia = nodoClase.Value.Herencia.Lexema;
+                clase.LineaDeclaracion = nodoClase.Value.LineaDeclaracion;
+
+                foreach(var nodoAtributo in nodoClase.Value.TablaSimbolosAtributos)
+                {
+                    clase.Atributos += nodoAtributo.Value.Lexema + " ";
+                }
+
+                foreach (var nodoMetodo in nodoClase.Value.TablaSimbolosMetodos)
+                {
+                    clase.Metodos += nodoMetodo.Value.Lexema + " ";
+
+                    if (nodoMetodo.Value.TablaParametro.Count() > 0)
+                    {
+                        clase.Metodos += "PARAMETROS: ";
+                        foreach (var nodoParametro in nodoMetodo.Value.TablaParametro)
+                        {
+                            clase.Metodos += nodoParametro.Value.Lexema + " ";
+                        }
+                    }
+
+                    if (nodoMetodo.Value.TablaVariables.Count() > 0)
+                    {
+                        clase.Metodos += "VARIABLES: ";
+                        foreach (var nodoVariable in nodoMetodo.Value.TablaVariables)
+                        {
+                            clase.Metodos += nodoVariable.Value.Lexema + " ";
+                        }
+                    }
+                }
+                listaClases.Add(clase);
+            }
+            return listaClases;
+        }
+
+    }
+
+    public class TSMostrar
+    {
+        private string lexema;
+        private string herencia;
+        private int lineaDeclaracion;
+        private int[] referencias;
+
+        private string atributos;
+        private string metodos;
+
+        public string Lexema
+        {
+            get
+            {
+                return lexema;
+            }
+
+            set
+            {
+                lexema = value;
+            }
+        }
+        public string Herencia
+        {
+            get
+            {
+                return herencia;
+            }
+
+            set
+            {
+                herencia = value;
+            }
+        }
+        public int LineaDeclaracion
+        {
+            get
+            {
+                return lineaDeclaracion;
+            }
+
+            set
+            {
+                lineaDeclaracion = value;
+            }
+        }
+        public int[] Referencias
+        {
+            get
+            {
+                return referencias;
+            }
+
+            set
+            {
+                referencias = value;
+            }
+        }
+        public string Atributos
+        {
+            get
+            {
+                return atributos;
+            }
+
+            set
+            {
+                atributos = value;
+            }
+        }
+        public string Metodos
+        {
+            get
+            {
+                return metodos;
+            }
+
+            set
+            {
+                metodos = value;
+            }
+        }
     }
 }

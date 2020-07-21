@@ -133,7 +133,7 @@
             // 
             this.editorTexto1.Location = new System.Drawing.Point(0, 0);
             this.editorTexto1.Name = "editorTexto1";
-            this.editorTexto1.Size = new System.Drawing.Size(623, 603);
+            this.editorTexto1.Size = new System.Drawing.Size(613, 603);
             this.editorTexto1.TabIndex = 0;
             // 
             // dgvListaTokens
@@ -141,9 +141,9 @@
             this.dgvListaTokens.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dgvListaTokens.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvListaTokens.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvListaTokens.Location = new System.Drawing.Point(711, 97);
+            this.dgvListaTokens.Location = new System.Drawing.Point(660, 97);
             this.dgvListaTokens.Name = "dgvListaTokens";
-            this.dgvListaTokens.Size = new System.Drawing.Size(317, 158);
+            this.dgvListaTokens.Size = new System.Drawing.Size(388, 158);
             this.dgvListaTokens.TabIndex = 2;
             // 
             // label1
@@ -169,17 +169,17 @@
             // dataGridView2
             // 
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Location = new System.Drawing.Point(711, 295);
+            this.dataGridView2.Location = new System.Drawing.Point(660, 295);
             this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(317, 158);
+            this.dataGridView2.Size = new System.Drawing.Size(388, 158);
             this.dataGridView2.TabIndex = 4;
             // 
             // dgvTablaSimbolo
             // 
             this.dgvTablaSimbolo.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvTablaSimbolo.Location = new System.Drawing.Point(711, 502);
+            this.dgvTablaSimbolo.Location = new System.Drawing.Point(660, 502);
             this.dgvTablaSimbolo.Name = "dgvTablaSimbolo";
-            this.dgvTablaSimbolo.Size = new System.Drawing.Size(317, 156);
+            this.dgvTablaSimbolo.Size = new System.Drawing.Size(388, 156);
             this.dgvTablaSimbolo.TabIndex = 6;
             // 
             // label3
