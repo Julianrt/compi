@@ -278,6 +278,7 @@ namespace LenguajesyAutomatas
         {
             frmEditor tabla = new frmEditor();
             //String codigoFuente = EditorTexto.text;
+            string _resultado;
             try
             {
                 
@@ -340,6 +341,23 @@ namespace LenguajesyAutomatas
                         nodoVariable.MiTipoVariable = TipoDeVariable.VariableLocal;
                         nodoVariable.LineaDeclaracion = linea;
                         TablaSimbolos.InsertarVariable(nodoClase, nodoMetodo, nodoVariable);
+                        break;
+
+                    case 81: //VARIABLE FOR
+                        _lexema = listaLexemas[puntero + 1];
+                        NodoVariable nv = new NodoVariable();
+                        nv.Lexema = _lexema;
+                        nv.LineaDeclaracion = linea;
+                        nv.MiTipoDato = TipoDeDato.Entero;
+                        nv.MiTipoVariable = TipoDeVariable.VariableLocal;
+                        _resultado = TablaSimbolos.InsertarVariable(nodoClase, nodoMetodo, nv).ToString();
+                        break;
+
+                    case 87:
+                        var lexemaClase = listaLexemas[puntero - 1];
+                        var lexemaMetodo = listaLexemas[puntero + 1];
+                        var valid = TablaSimbolos.ValidarInvocaion(lexemaClase, lexemaMetodo);
+                        //MessageBox.Show(valid.ToString());
                         break;
                 }
             }

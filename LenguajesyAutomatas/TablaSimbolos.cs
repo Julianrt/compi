@@ -315,7 +315,7 @@ namespace LenguajesyAutomatas
             }
             else
             {
-                MessageBox.Show(Estado.Duplicado.ToString());
+                MessageBox.Show("La clase "+miNodoClase.Lexema+" de la linea "+miNodoClase.LineaDeclaracion+" ya se habia escrito","ESTADO: CLASE DUPLICADA");
                 return Estado.Duplicado;
             }
         }
@@ -401,6 +401,11 @@ namespace LenguajesyAutomatas
         {
             if (tablaSimbolosClase.ContainsKey(claseActual.Lexema))
             {
+                if (claseActual.Lexema == _nuevometodo.Lexema)
+                {
+                    MessageBox.Show("El metodo no se puede llamar igual a la clase","ESTADO: METODO DUPLICADO");
+                    return Estado.Duplicado;
+                }
                 if (!claseActual.TablaSimbolosMetodos.ContainsKey(_nuevometodo.Lexema))
                 {
                     claseActual.TablaSimbolosMetodos.Add(_nuevometodo.Lexema, _nuevometodo);
@@ -410,6 +415,7 @@ namespace LenguajesyAutomatas
                 }
                 else
                 {
+                    MessageBox.Show("El metodo "+_nuevometodo.Lexema+" en la linea "+_nuevometodo.LineaDeclaracion+" ya se habia escrito","ESTADO: METODO DUPLICADO");
                     return Estado.Duplicado;
                 }
             }
@@ -440,6 +446,7 @@ namespace LenguajesyAutomatas
                     }
                     else
                     {
+                        MessageBox.Show("El parametro "+nodoParametro.Lexema+" en el metodo "+nodoMetodo.Lexema+" en linea "+nodoParametro.LineaDeclaracion+" ya habia sido escrito","ESTADO: PARAMETRO DUPLICADO");
                         return Estado.Duplicado;
                     }
                 }
@@ -482,17 +489,14 @@ namespace LenguajesyAutomatas
                 {
                     if ( nodoMetodo.TablaParametro.ContainsKey(nodoVariable.Lexema))
                     {
-                        throw new Exception("Error Semantico: Ya existe un parametro con el identificador "+nodoVariable.Lexema);
+                        //throw new Exception("Error Semantico: Ya existe un parametro con el identificador "+nodoVariable.Lexema);
                     }
-                    if (!nodoMetodo.TablaVariables.ContainsKey(nodoVariable.Lexema))
+                    else if (!nodoMetodo.TablaVariables.ContainsKey(nodoVariable.Lexema))
                     {
                         nodoMetodo.TablaVariables.Add(nodoVariable.Lexema, nodoVariable);
-                        return Estado.Insertado;
                     }
-                    else
-                    {
-                        return Estado.Duplicado;
-                    }
+                    return Estado.Insertado;
+                    
                 }
                 else
                 {
@@ -528,6 +532,45 @@ namespace LenguajesyAutomatas
             {
                 throw new Exception("Error Semantico: No existe el nombre de Clase");
             }
+        }
+        #endregion
+
+        #region invocacion
+        public static bool ValidarInvocaion(string clase, string metodo)
+        {
+            NodoClase nodoClase;
+            NodoMetodo nodoMetodo;
+            TablaSimbolos ts = new TablaSimbolos();
+            if (TablaSimbolosClase.ContainsKey(clase))
+            {
+                nodoClase = ts.ObtenerNodoClase(clase);
+                if (nodoClase.TablaSimbolosMetodos.ContainsKey(metodo))
+                {
+                    nodoMetodo = ts.ObtenerNodoMetodo(nodoClase, metodo);
+                    return true;
+                }
+                else
+                {
+                    MessageBox.Show("La clase "+clase+" no tiene un metodo llamado "+metodo,"ESTADO: INVOCACION INCORRECTA");
+                    return false;
+                }
+            }
+            else
+            {
+                MessageBox.Show("No se encontro la clase "+clase+" de la que se quiere invocar "+metodo,"ESTADO: INVOVACION INCORRECTA");
+                return false;
+            }
+
+            /*var _metodos = TablaDeSimbolos.Select(x => x.Value).Where(x => x.id.StartsWith(metodo + "*")).ToList();
+            if (_metodos.Count > 0)
+            {
+                var _metodo = _metodos[_metodos.Count - 1];
+                invocacionActual = _metodo.id;
+            }
+            else
+            {
+                throw new Exception("Error: Metodo no encontrado");
+            }*/
         }
         #endregion
 
