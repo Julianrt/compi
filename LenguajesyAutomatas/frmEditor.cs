@@ -86,6 +86,8 @@ namespace LenguajesyAutomatas
 
             var controles = tabControl1.Controls.OfType<TabPage>().Where(x => x.Name.StartsWith(nombreTabpageseleccionada));
 
+            //var ObjArbol = new Arboles(Lexico.)
+
             foreach (var ctrl in controles)
             {
                 var controleseditor = ctrl.Controls.OfType<EditorTexto>().Where(x => x.Name.StartsWith("editorTexto" + indiceparacontroleditort));
