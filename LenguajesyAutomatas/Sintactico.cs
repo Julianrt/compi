@@ -309,6 +309,19 @@ namespace LenguajesyAutomatas
                         //Valor y tipoDato se llena cuando está el arbol
                         nodoAtributo.Valor = "";
                         nodoAtributo.TipoDato = TipoDeDato.SinEspecificar;
+
+                        int contador = puntero;
+                        do
+                        {
+                            contador++;
+
+                            if (listaTablaSimboloToken[contador].token == -1)
+                            {
+                                ts.LlamarAtributo(nodoClase, listaTablaSimboloToken[contador].lexema, listaTablaSimboloToken[contador].linea);
+                            }
+
+                        } while (listaTablaSimboloToken[contador].token != -40);
+
                         TablaSimbolos.InsertarNodoAtributo(nodoAtributo, nodoClase);
                         break;
 
@@ -340,6 +353,27 @@ namespace LenguajesyAutomatas
                         nodoVariable.MiTipoDato = TipoDeDato.SinEspecificar;
                         nodoVariable.MiTipoVariable = TipoDeVariable.VariableLocal;
                         nodoVariable.LineaDeclaracion = linea;
+
+                        int j = puntero;
+                        do
+                        {
+                            j++;
+                            if (listaTablaSimboloToken[j].token == -1)
+                            {
+                                if (!ts.ExisteVariable(nodoMetodo, listaTablaSimboloToken[j].lexema))
+                                {
+                                    if (!ts.ExisteParametro(nodoMetodo, listaTablaSimboloToken[j].lexema))
+                                    {
+                                        if (!ts.ExisteAtributo(nodoClase, listaTablaSimboloToken[j].lexema))
+                                        {
+                                            MessageBox.Show("No se encontró " + listaTablaSimboloToken[j].lexema);
+                                        }
+                                    }
+                                }
+                            }
+
+                        } while (listaTablaSimboloToken[j].token != -40);
+                        
                         TablaSimbolos.InsertarVariable(nodoClase, nodoMetodo, nodoVariable);
                         break;
 
@@ -353,10 +387,52 @@ namespace LenguajesyAutomatas
                         _resultado = TablaSimbolos.InsertarVariable(nodoClase, nodoMetodo, nv).ToString();
                         break;
 
-                    case 87:
+                    case 87:  //INVOCACION
+                        int cantidadArgumentos = 0;
                         var lexemaClase = listaLexemas[puntero - 1];
                         var lexemaMetodo = listaLexemas[puntero + 1];
+                        NodoClase nodoClaseInvocacion = ts.ObtenerNodoClase(lexemaClase);
+                        NodoMetodo nodoMetodoInvocacion = ts.ObtenerNodoMetodo(nodoClaseInvocacion, lexemaMetodo);
+
                         var valid = TablaSimbolos.ValidarInvocaion(lexemaClase, lexemaMetodo);
+                        if (valid)
+                        {
+                            int i = puntero + 1;
+                            do
+                            {
+                                i++;
+                                if (listaTablaSimboloToken[i].token == -1)
+                                {
+                                    cantidadArgumentos++;
+
+                                    if (!ts.ExisteVariable(nodoMetodo,  listaTablaSimboloToken[i].lexema))
+                                    {
+                                        if (!ts.ExisteParametro(nodoMetodo, listaTablaSimboloToken[i].lexema))
+                                        {
+                                            if (!ts.ExisteAtributo(nodoClase, listaTablaSimboloToken[i].lexema))
+                                            {
+                                                MessageBox.Show("No hay atributo o variable local llamada "+ listaTablaSimboloToken[i].lexema+" en la clase "+nodoClase.Lexema+ " o metodo "+nodoMetodo.Lexema);
+                                            }
+                                        }
+                                    }
+                                }
+
+                            } while (listaTablaSimboloToken[i].token != -34);
+
+                            //MessageBox.Show("En la invocacion se pusieron "+cantidadArgumentos+" argumentos");
+
+
+
+                            var nodoClasesinha = ts.ObtenerNodoClase(lexemaClase);
+                            var nodoMetodinho = ts.ObtenerNodoMetodo(nodoClasesinha, lexemaMetodo);
+                            int cantidadParametros = ts.ObtenerCantidadParametros(nodoMetodinho);
+                            //MessageBox.Show("El metodo "+lexemaMetodo+" necesita "+cantidadParametros+ " parametros");
+
+                            if (cantidadArgumentos != cantidadParametros)
+                            {
+                                MessageBox.Show("Al invocar "+lexemaClase+"."+lexemaMetodo+" necesitas "+cantidadParametros+" parámetros y tu escribiste "+cantidadArgumentos+" parámetros");
+                            }
+                        }
                         //MessageBox.Show(valid.ToString());
                         break;
                 }

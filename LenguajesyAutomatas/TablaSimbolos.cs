@@ -394,6 +394,14 @@ namespace LenguajesyAutomatas
                 return false;
             }
         }
+        public bool LlamarAtributo(NodoClase nodoClase, string lexema, int linea)
+        {
+            if (ExisteAtributo(nodoClase, lexema))
+            {
+                return true;
+            }
+            return false;
+        }
         #endregion
 
         #region Metodos TS Metodos
@@ -430,6 +438,10 @@ namespace LenguajesyAutomatas
                 return _clase.TablaSimbolosMetodos.SingleOrDefault(x => x.Key.ToString() == _idMetodo).Value;
             else
                 throw new Exception("Error Semantico: No existe el nombre del metodo");
+        }
+        public int ObtenerCantidadParametros(NodoMetodo nodoMetodo)
+        {
+            return nodoMetodo.TablaParametro.Count();
         }
         #endregion
 
@@ -476,6 +488,17 @@ namespace LenguajesyAutomatas
             else
             {
                 throw new Exception("Error Semantico: No existe el nombre del metodo");
+            }
+        }
+        public bool ExisteParametro(NodoMetodo nodoMetodo, string lexemaParametro)
+        {
+            if (nodoMetodo.TablaParametro.ContainsKey(lexemaParametro))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
         #endregion
@@ -531,6 +554,17 @@ namespace LenguajesyAutomatas
             else
             {
                 throw new Exception("Error Semantico: No existe el nombre de Clase");
+            }
+        }
+        public bool ExisteVariable(NodoMetodo nodoMetodo, string lexemaVariable)
+        {
+            if (nodoMetodo.TablaVariables.ContainsKey(lexemaVariable))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
         #endregion
@@ -701,5 +735,16 @@ namespace LenguajesyAutomatas
                 metodos = value;
             }
         }
+    }
+
+    public class ErrorSemanticosDGV
+    {
+        private int linea;
+        private string lexema;
+        private string mensaje;
+
+        public int Linea { get => linea; set => linea = value; }
+        public string Lexema { get => lexema; set => lexema = value; }
+        public string Mensaje { get => mensaje; set => mensaje = value; }
     }
 }
