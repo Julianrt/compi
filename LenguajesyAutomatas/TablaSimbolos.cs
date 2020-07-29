@@ -297,6 +297,9 @@ namespace LenguajesyAutomatas
                 tablaSimbolosClase = value;
             }
         }
+
+        private static List<ErrorSemanticoDGV> listaErroresSemanticos = new List<ErrorSemanticoDGV>();
+        public static List<ErrorSemanticoDGV> ListaErroresSemanticos { get => listaErroresSemanticos; set => listaErroresSemanticos = value; }
 		
         #region Metodos TS Clase
         public NodoClase ObtenerNodoClase(string lexema)
@@ -304,7 +307,8 @@ namespace LenguajesyAutomatas
             if (tablaSimbolosClase.ContainsKey(lexema))
                 return tablaSimbolosClase.SingleOrDefault(x => x.Key.ToString() == lexema).Value;
             else
-                throw new Exception("Error Semantico: No existe el nombre de Clase");
+                return new NodoClase();
+                //throw new Exception("Error Semantico: No existe el nombre de Clase");
         }
         public static Estado InsertarNodoClase(NodoClase miNodoClase)
         {
@@ -315,7 +319,12 @@ namespace LenguajesyAutomatas
             }
             else
             {
-                MessageBox.Show("La clase "+miNodoClase.Lexema+" de la linea "+miNodoClase.LineaDeclaracion+" ya se habia escrito","ESTADO: CLASE DUPLICADA");
+                ErrorSemanticoDGV error = new ErrorSemanticoDGV();
+                error.Linea = miNodoClase.LineaDeclaracion;
+                error.Lexema = miNodoClase.Lexema;
+                error.Mensaje = "ESTADO: Duplicado - La clase " + error.Lexema + " de la linea " + error.Linea + " ya se habia escrito";
+                TablaSimbolos.ListaErroresSemanticos.Add(error);
+                //MessageBox.Show("La clase "+miNodoClase.Lexema+" de la linea "+miNodoClase.LineaDeclaracion+" ya se habia escrito","ESTADO: CLASE DUPLICADA");
                 return Estado.Duplicado;
             }
         }
@@ -340,11 +349,18 @@ namespace LenguajesyAutomatas
                 }
                 else
                 {
-                    throw new Exception("Error Semantico: No existe el nombre de Clase");
+
+                    return Estado.NoExisteClase;
+                    //throw new Exception("Error Semantico: No existe el nombre de Clase");
                 }
             }
             else
             {
+                ErrorSemanticoDGV error = new ErrorSemanticoDGV();
+                error.Linea = nodoClase.LineaDeclaracion;
+                error.Lexema = _herencia;
+                error.Mensaje = "No se encontro la clase: " + error.Lexema + " de la que quiere heredar en la linea: " + error.Linea;
+                TablaSimbolos.ListaErroresSemanticos.Add(error);
                 return Estado.NoExisteClase;
             }
         }
@@ -379,6 +395,11 @@ namespace LenguajesyAutomatas
             }
             else
             {
+                ErrorSemanticoDGV error = new ErrorSemanticoDGV();
+                error.Linea = nodo.LineaDeclaracion;
+                error.Lexema = nodo.Lexema;
+                error.Mensaje = "El atributo " + error.Lexema + " no se puede llamar como la clase";
+                TablaSimbolos.ListaErroresSemanticos.Add(error);
                 return Estado.DuplicadoAtributoConClase;
                 //ERROR DE NOMBRE DE ATRIBUTO IGUAL QUE SU CLASE.
             }
@@ -411,7 +432,12 @@ namespace LenguajesyAutomatas
             {
                 if (claseActual.Lexema == _nuevometodo.Lexema)
                 {
-                    MessageBox.Show("El metodo no se puede llamar igual a la clase","ESTADO: METODO DUPLICADO");
+                    ErrorSemanticoDGV error = new ErrorSemanticoDGV();
+                    error.Linea = _nuevometodo.LineaDeclaracion;
+                    error.Lexema = _nuevometodo.Lexema;
+                    error.Mensaje = "El metodo "+error.Lexema+" en la linea "+error.Linea+" no puede llamarse igual a su clase";
+                    TablaSimbolos.ListaErroresSemanticos.Add(error);
+                    //MessageBox.Show("El metodo no se puede llamar igual a la clase","ESTADO: METODO DUPLICADO");
                     return Estado.Duplicado;
                 }
                 if (!claseActual.TablaSimbolosMetodos.ContainsKey(_nuevometodo.Lexema))
@@ -423,7 +449,12 @@ namespace LenguajesyAutomatas
                 }
                 else
                 {
-                    MessageBox.Show("El metodo "+_nuevometodo.Lexema+" en la linea "+_nuevometodo.LineaDeclaracion+" ya se habia escrito","ESTADO: METODO DUPLICADO");
+                    ErrorSemanticoDGV error = new ErrorSemanticoDGV();
+                    error.Linea = _nuevometodo.LineaDeclaracion;
+                    error.Lexema = _nuevometodo.Lexema;
+                    error.Mensaje = "El metodo " + error.Lexema + " en la linea " + error.Linea + " ya habia sido escrito";
+                    TablaSimbolos.ListaErroresSemanticos.Add(error);
+                    //MessageBox.Show("El metodo "+_nuevometodo.Lexema+" en la linea "+_nuevometodo.LineaDeclaracion+" ya se habia escrito","ESTADO: METODO DUPLICADO");
                     return Estado.Duplicado;
                 }
             }
@@ -437,7 +468,8 @@ namespace LenguajesyAutomatas
             if (_clase.TablaSimbolosMetodos.ContainsKey(_idMetodo))
                 return _clase.TablaSimbolosMetodos.SingleOrDefault(x => x.Key.ToString() == _idMetodo).Value;
             else
-                throw new Exception("Error Semantico: No existe el nombre del metodo");
+                return new NodoMetodo();
+                //throw new Exception("Error Semantico: No existe el nombre del metodo");
         }
         public int ObtenerCantidadParametros(NodoMetodo nodoMetodo)
         {
@@ -585,13 +617,13 @@ namespace LenguajesyAutomatas
                 }
                 else
                 {
-                    MessageBox.Show("La clase "+clase+" no tiene un metodo llamado "+metodo,"ESTADO: INVOCACION INCORRECTA");
+                    //MessageBox.Show("La clase "+clase+" no tiene un metodo llamado "+metodo,"ESTADO: INVOCACION INCORRECTA");
                     return false;
                 }
             }
             else
             {
-                MessageBox.Show("No se encontro la clase "+clase+" de la que se quiere invocar "+metodo,"ESTADO: INVOVACION INCORRECTA");
+                //MessageBox.Show("No se encontro la clase "+clase+" de la que se quiere invocar "+metodo,"ESTADO: INVOVACION INCORRECTA");
                 return false;
             }
 
@@ -737,7 +769,7 @@ namespace LenguajesyAutomatas
         }
     }
 
-    public class ErrorSemanticosDGV
+    public class ErrorSemanticoDGV
     {
         private int linea;
         private string lexema;

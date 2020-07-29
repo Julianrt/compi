@@ -37,19 +37,28 @@
             this.tsrEjecutarAnalizadorSintactico = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.editorTexto1 = new LenguajesyAutomatas.EditorTexto();
             this.dgvListaTokens = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.dgvErrores = new System.Windows.Forms.DataGridView();
             this.dgvTablaSimbolo = new System.Windows.Forms.DataGridView();
             this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.dgvTSAtributos = new System.Windows.Forms.DataGridView();
+            this.label5 = new System.Windows.Forms.Label();
+            this.dgvTSMetodos = new System.Windows.Forms.DataGridView();
+            this.label6 = new System.Windows.Forms.Label();
+            this.dgvTSParametrosVariables = new System.Windows.Forms.DataGridView();
+            this.editorTexto1 = new LenguajesyAutomatas.EditorTexto();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvListaTokens)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvErrores)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTablaSimbolo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTSAtributos)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTSMetodos)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTSParametrosVariables)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -129,28 +138,21 @@
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // editorTexto1
-            // 
-            this.editorTexto1.Location = new System.Drawing.Point(0, 0);
-            this.editorTexto1.Name = "editorTexto1";
-            this.editorTexto1.Size = new System.Drawing.Size(613, 603);
-            this.editorTexto1.TabIndex = 0;
-            // 
             // dgvListaTokens
             // 
             this.dgvListaTokens.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dgvListaTokens.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvListaTokens.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvListaTokens.Location = new System.Drawing.Point(660, 97);
+            this.dgvListaTokens.Location = new System.Drawing.Point(660, 49);
             this.dgvListaTokens.Name = "dgvListaTokens";
-            this.dgvListaTokens.Size = new System.Drawing.Size(388, 158);
+            this.dgvListaTokens.Size = new System.Drawing.Size(388, 62);
             this.dgvListaTokens.TabIndex = 2;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(798, 70);
+            this.label1.Location = new System.Drawing.Point(797, 22);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(149, 24);
             this.label1.TabIndex = 3;
@@ -160,37 +162,98 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(838, 268);
+            this.label2.Location = new System.Drawing.Point(830, 114);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(79, 24);
             this.label2.TabIndex = 5;
             this.label2.Text = "Errores";
             // 
-            // dataGridView2
+            // dgvErrores
             // 
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Location = new System.Drawing.Point(660, 295);
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(388, 158);
-            this.dataGridView2.TabIndex = 4;
+            this.dgvErrores.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvErrores.Location = new System.Drawing.Point(660, 141);
+            this.dgvErrores.Name = "dgvErrores";
+            this.dgvErrores.Size = new System.Drawing.Size(388, 94);
+            this.dgvErrores.TabIndex = 4;
             // 
             // dgvTablaSimbolo
             // 
             this.dgvTablaSimbolo.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvTablaSimbolo.Location = new System.Drawing.Point(660, 502);
+            this.dgvTablaSimbolo.Location = new System.Drawing.Point(656, 265);
             this.dgvTablaSimbolo.Name = "dgvTablaSimbolo";
-            this.dgvTablaSimbolo.Size = new System.Drawing.Size(388, 156);
+            this.dgvTablaSimbolo.Size = new System.Drawing.Size(388, 94);
             this.dgvTablaSimbolo.TabIndex = 6;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(798, 468);
+            this.label3.Location = new System.Drawing.Point(811, 238);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(181, 24);
+            this.label3.Size = new System.Drawing.Size(104, 24);
             this.label3.TabIndex = 7;
-            this.label3.Text = "Tabla de simbolos";
+            this.label3.Text = "TS Clases";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(809, 362);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(124, 24);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "TS Atributos";
+            // 
+            // dgvTSAtributos
+            // 
+            this.dgvTSAtributos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvTSAtributos.Location = new System.Drawing.Point(656, 389);
+            this.dgvTSAtributos.Name = "dgvTSAtributos";
+            this.dgvTSAtributos.Size = new System.Drawing.Size(388, 73);
+            this.dgvTSAtributos.TabIndex = 8;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(811, 465);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(122, 24);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "TS Metodos";
+            // 
+            // dgvTSMetodos
+            // 
+            this.dgvTSMetodos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvTSMetodos.Location = new System.Drawing.Point(656, 492);
+            this.dgvTSMetodos.Name = "dgvTSMetodos";
+            this.dgvTSMetodos.Size = new System.Drawing.Size(388, 73);
+            this.dgvTSMetodos.TabIndex = 10;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(753, 570);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(252, 24);
+            this.label6.TabIndex = 13;
+            this.label6.Text = "TS Parametros y variables";
+            // 
+            // dgvTSParametrosVariables
+            // 
+            this.dgvTSParametrosVariables.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvTSParametrosVariables.Location = new System.Drawing.Point(656, 597);
+            this.dgvTSParametrosVariables.Name = "dgvTSParametrosVariables";
+            this.dgvTSParametrosVariables.Size = new System.Drawing.Size(388, 73);
+            this.dgvTSParametrosVariables.TabIndex = 12;
+            // 
+            // editorTexto1
+            // 
+            this.editorTexto1.Location = new System.Drawing.Point(0, 0);
+            this.editorTexto1.Name = "editorTexto1";
+            this.editorTexto1.Size = new System.Drawing.Size(613, 603);
+            this.editorTexto1.TabIndex = 0;
             // 
             // frmEditor
             // 
@@ -198,10 +261,16 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(1060, 684);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.dgvTSParametrosVariables);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.dgvTSMetodos);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.dgvTSAtributos);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.dgvTablaSimbolo);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.dataGridView2);
+            this.Controls.Add(this.dgvErrores);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.dgvListaTokens);
             this.Controls.Add(this.tabControl1);
@@ -217,8 +286,11 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvListaTokens)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvErrores)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTablaSimbolo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTSAtributos)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTSMetodos)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTSParametrosVariables)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -238,9 +310,15 @@
         private System.Windows.Forms.DataGridView dgvListaTokens;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.DataGridView dataGridView2;
+        private System.Windows.Forms.DataGridView dgvErrores;
         private System.Windows.Forms.ToolStripMenuItem tsrEjecutarAnalizadorSintactico;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.DataGridView dgvTablaSimbolo;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.DataGridView dgvTSAtributos;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.DataGridView dgvTSMetodos;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.DataGridView dgvTSParametrosVariables;
     }
 }

@@ -317,7 +317,17 @@ namespace LenguajesyAutomatas
 
                             if (listaTablaSimboloToken[contador].token == -1)
                             {
-                                ts.LlamarAtributo(nodoClase, listaTablaSimboloToken[contador].lexema, listaTablaSimboloToken[contador].linea);
+                                bool validA = ts.LlamarAtributo(nodoClase, listaTablaSimboloToken[contador].lexema, listaTablaSimboloToken[contador].linea);
+                                if (!validA)
+                                {
+                                    ErrorSemanticoDGV errorSemantico = new ErrorSemanticoDGV();
+                                    errorSemantico.Linea = listaTablaSimboloToken[contador].linea;
+                                    errorSemantico.Lexema = listaTablaSimboloToken[contador].lexema;
+                                    errorSemantico.Mensaje = "No se encontro la entidad "+errorSemantico.Lexema+" que fue llamada desde la linea: "+errorSemantico.Linea;
+                                    TablaSimbolos.ListaErroresSemanticos.Add(errorSemantico);
+                                    //MessageBox.Show("No se encontro la entidad "+listaTablaSimboloToken[contador].lexema+" llamada desde la linea: "+listaTablaSimboloToken[contador].linea);
+                                }
+
                             }
 
                         } while (listaTablaSimboloToken[contador].token != -40);
@@ -366,7 +376,12 @@ namespace LenguajesyAutomatas
                                     {
                                         if (!ts.ExisteAtributo(nodoClase, listaTablaSimboloToken[j].lexema))
                                         {
-                                            MessageBox.Show("No se encontró " + listaTablaSimboloToken[j].lexema);
+                                            ErrorSemanticoDGV error = new ErrorSemanticoDGV();
+                                            error.Linea = listaTablaSimboloToken[j].linea;
+                                            error.Lexema = listaTablaSimboloToken[j].lexema;
+                                            error.Mensaje = "Entidad " + error.Lexema + " no declarada";
+                                            TablaSimbolos.ListaErroresSemanticos.Add(error);
+                                            //MessageBox.Show("No se encontró " + listaTablaSimboloToken[j].lexema);
                                         }
                                     }
                                 }
@@ -392,7 +407,27 @@ namespace LenguajesyAutomatas
                         var lexemaClase = listaLexemas[puntero - 1];
                         var lexemaMetodo = listaLexemas[puntero + 1];
                         NodoClase nodoClaseInvocacion = ts.ObtenerNodoClase(lexemaClase);
-                        NodoMetodo nodoMetodoInvocacion = ts.ObtenerNodoMetodo(nodoClaseInvocacion, lexemaMetodo);
+                        NodoMetodo nodoMetodoInvocacion;
+                        if (nodoClaseInvocacion.Lexema == null)
+                        {
+                            ErrorSemanticoDGV error = new ErrorSemanticoDGV();
+                            error.Linea = linea;
+                            error.Lexema = lexemaClase;
+                            error.Mensaje = "No se encontró la clase " + error.Lexema;
+                            TablaSimbolos.ListaErroresSemanticos.Add(error);
+                        }
+                        else
+                        {
+                            nodoMetodoInvocacion = ts.ObtenerNodoMetodo(nodoClaseInvocacion, lexemaMetodo);
+                            if (nodoMetodoInvocacion.Lexema == null)
+                            {
+                                ErrorSemanticoDGV error = new ErrorSemanticoDGV();
+                                error.Linea = linea;
+                                error.Lexema = lexemaMetodo;
+                                error.Mensaje = "No se encontró el metodo "+lexemaMetodo+" en la clase "+lexemaClase;
+                                TablaSimbolos.ListaErroresSemanticos.Add(error);
+                            }
+                        }
 
                         var valid = TablaSimbolos.ValidarInvocaion(lexemaClase, lexemaMetodo);
                         if (valid)
@@ -411,7 +446,12 @@ namespace LenguajesyAutomatas
                                         {
                                             if (!ts.ExisteAtributo(nodoClase, listaTablaSimboloToken[i].lexema))
                                             {
-                                                MessageBox.Show("No hay atributo o variable local llamada "+ listaTablaSimboloToken[i].lexema+" en la clase "+nodoClase.Lexema+ " o metodo "+nodoMetodo.Lexema);
+                                                ErrorSemanticoDGV error = new ErrorSemanticoDGV();
+                                                error.Linea = listaTablaSimboloToken[i].linea;
+                                                error.Lexema = listaTablaSimboloToken[i].lexema;
+                                                error.Mensaje = "Entidad "+error.Lexema+" no declarada";
+                                                TablaSimbolos.ListaErroresSemanticos.Add(error);
+                                                //MessageBox.Show("No hay atributo o variable local llamada "+ listaTablaSimboloToken[i].lexema+" en la clase "+nodoClase.Lexema+ " o metodo "+nodoMetodo.Lexema);
                                             }
                                         }
                                     }
@@ -430,7 +470,12 @@ namespace LenguajesyAutomatas
 
                             if (cantidadArgumentos != cantidadParametros)
                             {
-                                MessageBox.Show("Al invocar "+lexemaClase+"."+lexemaMetodo+" necesitas "+cantidadParametros+" parámetros y tu escribiste "+cantidadArgumentos+" parámetros");
+                                ErrorSemanticoDGV error = new ErrorSemanticoDGV();
+                                error.Linea = linea;
+                                error.Lexema = nodoClasesinha.Lexema + "." + nodoMetodinho.Lexema;
+                                error.Mensaje = "El metodo " + nodoMetodinho.Lexema + " necesita " + cantidadParametros + " parámetros, y tu ingresaste " + cantidadArgumentos;
+                                TablaSimbolos.ListaErroresSemanticos.Add(error);
+                                //MessageBox.Show("Al invocar "+lexemaClase+"."+lexemaMetodo+" necesitas "+cantidadParametros+" parámetros y tu escribiste "+cantidadArgumentos+" parámetros");
                             }
                         }
                         //MessageBox.Show(valid.ToString());

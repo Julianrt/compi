@@ -147,9 +147,24 @@ namespace LenguajesyAutomatas
                         Tokensparasintactico[cantidaddetokens] = -99;
                         //MessageBox.Show(Convert.ToString(Tokensparasintactico[0])+" "+ Convert.ToString(Tokensparasintactico[1]));
 
+                        TablaSimbolos.ListaErroresSemanticos = new List<ErrorSemanticoDGV>();
                         TablaSimbolos.TablaSimbolosClase = new Dictionary<string, NodoClase>();
                         _sin.EjecutarSintactico(Tokensparasintactico, lexemaParaSintactico, listaTablaSimbolo);
-                        dgvTablaSimbolo.DataSource = TablaSimbolos.ObtenerListaClases();
+
+                        dgvErrores.DataSource = null;
+                        dgvErrores.Rows.Clear();
+
+                        dgvTablaSimbolo.DataSource = null;
+                        dgvTablaSimbolo.Rows.Clear();
+
+                        if (TablaSimbolos.ListaErroresSemanticos.Count > 0)
+                        {
+                            dgvErrores.DataSource = TablaSimbolos.ListaErroresSemanticos;
+                        }
+                        else
+                        {
+                            dgvTablaSimbolo.DataSource = TablaSimbolos.ObtenerListaClases();
+                        }
                     }
                     else
                     {
