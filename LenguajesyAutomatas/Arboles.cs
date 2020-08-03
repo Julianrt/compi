@@ -27,6 +27,7 @@ namespace LenguajesyAutomatas
         Operador,
         Constante,
         Identificador,
+        OperadorLogico,
         NADA
     }
     public enum tipoOperador
@@ -39,16 +40,16 @@ namespace LenguajesyAutomatas
     }
     public enum OperacionCondicional
     {
-        Suma,
-        Resta,
-        Multiplicacion,
-        Division,
-        IgualIgual,
-        MenorQue,
-        MayorQue,
-        MenorIgualQue,
-        MayorIgualQue,
-        Diferente,
+        Suma,//+
+        Resta,//-
+        Multiplicacion,//*
+        Division,// "/"
+        IgualIgual, // ==
+        MenorQue, //<
+        MayorQue,//>
+        MenorIgualQue, //<=
+        MayorIgualQue, //>=
+        Diferente, // !=
         NADA
     }
     #endregion
@@ -72,8 +73,10 @@ namespace LenguajesyAutomatas
 
         //reglas semanticas // atributos
         //comprobacion de tipos
-        public TipoDeDato tipoValorNodoHijoIzquierdo;
-        public TipoDeDato tipoValorNodoHijoDerecho;
+        public TipoDeDato tipoValorHijoIzquierdo;
+        public TipoDeDato tipoValorHijoDerecho;
+        public TipoDeDato tipoValorHermano;
+        public TipoDeDato tipoValorHijoCentro;
 
         public string lexema;
         public string valor;
@@ -167,9 +170,9 @@ namespace LenguajesyAutomatas
 
             nodo.soySentenciaDeTipo = TipoSentencia.NADA;
             nodo.soyOperacionCondicionaDeTipo = OperacionCondicional.NADA;
-            nodo.tipoValorNodoHijoDerecho = TipoDeDato.Vacio;
+            nodo.tipoValorHijoDerecho = TipoDeDato.Vacio;
             nodo.soyOperacionCondicionaDeTipo = OperacionCondicional.NADA;
-            nodo.tipoValorNodoHijoIzquierdo = TipoDeDato.Vacio;
+            nodo.tipoValorHijoIzquierdo = TipoDeDato.Vacio;
             return nodo;
         }
 
@@ -184,9 +187,9 @@ namespace LenguajesyAutomatas
 
             nodo.soySentenciaDeTipo = tipoSentencia;
             nodo.soyOperacionCondicionaDeTipo = OperacionCondicional.NADA;
-            nodo.tipoValorNodoHijoDerecho = TipoDeDato.Vacio;
+            nodo.tipoValorHijoDerecho = TipoDeDato.Vacio;
             nodo.soyOperacionCondicionaDeTipo = OperacionCondicional.NADA;
-            nodo.tipoValorNodoHijoIzquierdo = TipoDeDato.Vacio;
+            nodo.tipoValorHijoIzquierdo = TipoDeDato.Vacio;
             return nodo;
 
         }
@@ -202,8 +205,8 @@ namespace LenguajesyAutomatas
             nodo.soySentenciaDeTipo = TipoSentencia.NADA;
             nodo.soyOperacionCondicionaDeTipo = OperacionCondicional.NADA;
             nodo.soyOperacionCondicionaDeTipo = OperacionCondicional.NADA;
-            nodo.tipoValorNodoHijoDerecho = TipoDeDato.Vacio;
-            nodo.tipoValorNodoHijoIzquierdo = TipoDeDato.Vacio;
+            nodo.tipoValorHijoDerecho = TipoDeDato.Vacio;
+            nodo.tipoValorHijoIzquierdo = TipoDeDato.Vacio;
             return nodo;
 
         }
@@ -388,6 +391,150 @@ namespace LenguajesyAutomatas
             }
             return nodoRaiz;
         }
+
+        private TipoDeDato FuncionEquivalenciaDeDatos(TipoDeDato tipoValorHijoIzquierdo, TipoDeDato tipoValorHijoDerecho, OperacionCondicional soyOperacion)
+        {
+            switch (soyOperacion)
+            {
+
+                //artimeticas
+                case OperacionCondicional.Suma:
+                    if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Entero;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Decimal;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Decimal && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Decimal;
+
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Cadena && tipoValorHijoDerecho == TipoDeDato.Cadena) return TipoDeDato.Cadena;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Cadena && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Cadena;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Cadena) return TipoDeDato.Cadena;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Cadena && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Cadena;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Decimal && tipoValorHijoDerecho == TipoDeDato.Cadena) return TipoDeDato.Cadena;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Cadena && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Cadena;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Caracter && tipoValorHijoDerecho == TipoDeDato.Cadena) return TipoDeDato.Cadena;
+
+                    else
+                        throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                case OperacionCondicional.Resta:
+                    if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Entero;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Decimal;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Decimal && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Decimal;
+                    else
+                        throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                    break;
+                case OperacionCondicional.Multiplicacion:
+                    if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Entero;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Decimal;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Decimal && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Decimal;
+                    else
+                        throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                    break;
+                case OperacionCondicional.Division:
+                    if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Decimal;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Decimal;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Decimal && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Decimal;
+                    else
+                        throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                    break;
+
+
+                //logicas
+                case OperacionCondicional.IgualIgual:
+                    if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Booleano;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Decimal && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Cadena && tipoValorHijoDerecho == TipoDeDato.Cadena) return TipoDeDato.Booleano;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Booleano && tipoValorHijoDerecho == TipoDeDato.Booleano) return TipoDeDato.Booleano;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Caracter && tipoValorHijoDerecho == TipoDeDato.Caracter) return TipoDeDato.Booleano;
+                    else
+                        throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                    break;
+                case OperacionCondicional.Diferente:
+                    if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Booleano;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Decimal && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Cadena && tipoValorHijoDerecho == TipoDeDato.Cadena) return TipoDeDato.Booleano;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Booleano && tipoValorHijoDerecho == TipoDeDato.Booleano) return TipoDeDato.Booleano;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Caracter && tipoValorHijoDerecho == TipoDeDato.Caracter) return TipoDeDato.Booleano;
+                    else
+                        throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                    break;
+                case OperacionCondicional.MayorQue:
+                    if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Booleano;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Decimal && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
+                    else
+                        throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                    break;
+                case OperacionCondicional.MayorIgualQue:
+                    if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Booleano;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Decimal && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
+                    else
+                        throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                    break;
+                case OperacionCondicional.MenorQue:
+                    if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Booleano;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Decimal && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
+                    else
+                        throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                    break;
+                case OperacionCondicional.MenorIgualQue:
+                    if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Booleano;
+                    else if (tipoValorHijoIzquierdo == TipoDeDato.Decimal && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
+                    else
+                        throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                    break;
+
+            }
+            return TipoDeDato.Vacio;
+        }
+
+        public TipoDeDato VerificacionTipos(NodoArbol miArbol)
+        {
+            if (miArbol.soySentenciaDeTipo == TipoSentencia.ASIGNACION)
+
+            if ((miArbol.soySentenciaDeTipo != TipoSentencia.IF) &&
+                (miArbol.hijoIzquierdo != null)) miArbol.tipoValorHijoIzquierdo = VerificacionTipos(miArbol.hijoIzquierdo);
+
+
+            if ((miArbol.soySentenciaDeTipo != TipoSentencia.IF) &&
+                (miArbol.hijoDerecho != null)) miArbol.tipoValorHijoDerecho = VerificacionTipos(miArbol.hijoDerecho);
+
+            if (miArbol.soyDeTipoExpresion == tipoExpresion.Operador)
+            {
+                return FuncionEquivalenciaDeDatos(miArbol.tipoValorHijoIzquierdo, miArbol.tipoValorHijoDerecho, miArbol.soyOperacionCondicionaDeTipo);
+            }
+            else if (miArbol.soyDeTipoExpresion == tipoExpresion.OperadorLogico)
+            {
+                return FuncionEquivalenciaDeDatos(miArbol.tipoValorHijoIzquierdo, miArbol.tipoValorHijoDerecho, miArbol.soyOperacionCondicionaDeTipo);
+            }
+            else if (miArbol.soyDeTipoExpresion == tipoExpresion.Constante)
+            {
+                return miArbol.soyDeTipoDato;
+            }
+            else if (miArbol.soyDeTipoExpresion == tipoExpresion.Identificador)
+            {
+                return miArbol.soyDeTipoDato;
+            }
+            else if (miArbol.soySentenciaDeTipo == TipoSentencia.ASIGNACION)
+            {
+                return FuncionEquivalenciaDeDatos(miArbol.soyDeTipoDato, miArbol.tipoValorHijoIzquierdo);
+            }
+
+            return TipoDeDato.Vacio;
+        }
+
 
 
 

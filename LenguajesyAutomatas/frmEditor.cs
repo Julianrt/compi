@@ -86,7 +86,7 @@ namespace LenguajesyAutomatas
 
             var controles = tabControl1.Controls.OfType<TabPage>().Where(x => x.Name.StartsWith(nombreTabpageseleccionada));
 
-            //var ObjArbol = new Arboles(Lexico.)
+
 
             foreach (var ctrl in controles)
             {
@@ -129,6 +129,7 @@ namespace LenguajesyAutomatas
                     {
                         List<Token> lista = new List<Token>();
                         List<Token> listaTablaSimbolo = new List<Token>();
+                        //var ObjArbol = new Arboles(MiLi)
                         lista = _lex.EjecutarLexico(codigofuente);
                         int[] Tokensparasintactico = new int[500];
                         string [] lexemaParaSintactico = new string[500];

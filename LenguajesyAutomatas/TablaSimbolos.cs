@@ -16,6 +16,8 @@ namespace LenguajesyAutomatas
         Decimal,
         Cadena,
         Error,
+        Booleano,
+        Caracter,
         Vacio
     }
     public enum TipoDeVariable
