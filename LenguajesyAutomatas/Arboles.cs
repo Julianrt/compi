@@ -39,6 +39,10 @@ namespace LenguajesyAutomatas
     }
     public enum OperacionCondicional
     {
+        Suma,
+        Resta,
+        Multiplicacion,
+        Division,
         IgualIgual,
         MenorQue,
         MayorQue,
@@ -325,6 +329,26 @@ namespace LenguajesyAutomatas
         }
         #endregion
 
+        #region Crear arboles Lectura y escritura
+
+        public NodoArbol CrearArbolRead(string valor)
+        {
+            var Read = NuevoNodoSentencia(TipoSentencia.LEER);
+            Read.lexema = valor;
+            return Read;
+        }
+
+        public NodoArbol CrearArbolWrite()
+        {
+            var Write = NuevoNodoSentencia(TipoSentencia.ESCRIBIR);
+            Write.lexema = "write";
+            Write.hijoIzquierdo = SimpleExpresion();
+            return Write;
+        }
+
+
+        #endregion
+
         private NodoArbol ObtenerSiguienteArbol()
         {
             switch (miListaTokenCopia[Puntero].token)
@@ -347,7 +371,25 @@ namespace LenguajesyAutomatas
             }
         }
 
+        public NodoArbol SimpleExpresion()
+        {
+            NodoArbol nodoRaiz = Termino();
+            while (miListaTokenCopia[Puntero].lexema.Equals("+") || miListaTokenCopia[Puntero].lexema.Equals("-"))
+            {
+                NodoArbol nodoTemp = NuevoNodoExpresion(tipoExpresion.Operador);
+                nodoTemp.hijoIzquierdo = nodoRaiz;
+                nodoTemp.soyOperacionCondicionaDeTipo = miListaTokenCopia[Puntero].lexema.Equals("+") ? OperacionCondicional.Suma : OperacionCondicional.Resta;
+
+                nodoTemp.lexema = miListaTokenCopia[Puntero].lexema;
+
+                nodoRaiz = nodoTemp;
+                Puntero++;
+                nodoRaiz.hijoDerecho = Termino();
+            }
+            return nodoRaiz;
+        }
 
 
-	}
+
+    }
 }
