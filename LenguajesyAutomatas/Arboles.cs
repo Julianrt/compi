@@ -500,6 +500,21 @@ namespace LenguajesyAutomatas
             return TipoDeDato.Vacio;
         }
 
+        private TipoDeDato FuncionEquivalenciaAsignacion(TipoDeDato tipoValorAsignacion, TipoDeDato tipoValorHijoIzquierdo)
+        {
+            if (tipoValorHijoIzquierdo != TipoDeDato.Vacio)
+            {
+                if (tipoValorAsignacion == TipoDeDato.Entero && tipoValorHijoIzquierdo == TipoDeDato.Entero) return TipoDeDato.Entero;
+                else if (tipoValorAsignacion == TipoDeDato.Decimal && tipoValorHijoIzquierdo == TipoDeDato.Entero) return TipoDeDato.Decimal;
+                else if (tipoValorAsignacion == TipoDeDato.Decimal && tipoValorHijoIzquierdo == TipoDeDato.Decimal) return TipoDeDato.Decimal;
+                else if (tipoValorAsignacion == TipoDeDato.Booleano && tipoValorHijoIzquierdo == TipoDeDato.Booleano) return TipoDeDato.Booleano;
+                else if (tipoValorAsignacion == TipoDeDato.Cadena && tipoValorHijoIzquierdo == TipoDeDato.Cadena) return TipoDeDato.Cadena;
+                else if (tipoValorAsignacion == TipoDeDato.Caracter && tipoValorHijoIzquierdo == TipoDeDato.Caracter) return TipoDeDato.Caracter;
+                else
+                    throw new Exception(string.Format("Error de tipos no se puede realizar la asignación {0} con {1} ", tipoValorAsignacion, tipoValorHijoIzquierdo));
+            }
+            return TipoDeDato.Vacio;
+        }
         public TipoDeDato VerificacionTipos(NodoArbol miArbol)
         {
             if (miArbol.soySentenciaDeTipo == TipoSentencia.ASIGNACION)
@@ -529,7 +544,7 @@ namespace LenguajesyAutomatas
             }
             else if (miArbol.soySentenciaDeTipo == TipoSentencia.ASIGNACION)
             {
-                return FuncionEquivalenciaDeDatos(miArbol.soyDeTipoDato, miArbol.tipoValorHijoIzquierdo);
+                return FuncionEquivalenciaAsignacion(miArbol.soyDeTipoDato, miArbol.tipoValorHijoIzquierdo);
             }
 
             return TipoDeDato.Vacio;
@@ -540,3 +555,4 @@ namespace LenguajesyAutomatas
 
     }
 }
+    
