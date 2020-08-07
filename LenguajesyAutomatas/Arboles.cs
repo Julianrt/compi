@@ -107,6 +107,7 @@ namespace LenguajesyAutomatas
         public int Puntero;
         public List<Token> listToken;
         private NodoArbol root;
+        private string lexemaContadorFor;
 
         public Arboles (List<Token> listaDeTokens)
         {
@@ -117,7 +118,7 @@ namespace LenguajesyAutomatas
         public NodoArbol CrearArbolSintacticoAbstracto()
         {
             NodoArbol nodo = InsertNodo();
-            if (root == nodo) { }
+            if (root == nodo) { } //BUENO
             return nodo;
         }
 
@@ -151,6 +152,16 @@ namespace LenguajesyAutomatas
                         root = nodo;
                         break;
 
+                    case -109: //ELIF
+                        nodo = CrearArbolIF();
+                        root = nodo;
+                        break;
+
+                    case -113: //ELSE
+                        nodo = CrearNodoElse();
+                        root = nodo;
+                        break;
+
                     case -125: //FOR
                         nodo = CrearArbolFor();
                         root = nodo;
@@ -173,11 +184,21 @@ namespace LenguajesyAutomatas
             nodoFor.lexema = listToken[Puntero].lexema;
             nodoFor.hijoIzquierdo = DeclaracionFor();
             nodoFor.hijoCentro = ValidacionFor();
-            //MessageBox.Show(listToken[Puntero].lexema);
+            AvanzarPuntero(6);
+
+            while (listToken[Puntero].token == -40) //Evaluta si el token es un enter y recorrerlos
+            {
+                AvanzarPuntero();
+            }
+            if (listToken[Puntero].token == -38) //Si el token es la llave de cierre }
+            {
+                return null;
+            }
+
             nodoFor.hijoDerecho = SentenciasFor();
             nodoFor.hijoDerecho = SentenciaIncrementoFor(nodoFor.hijoDerecho);
 
-            AvanzarPuntero(8);
+            AvanzarPuntero(2);
 
             while (listToken[Puntero].token == -40) //Evaluta si el token es un enter y recorrerlos
             {
@@ -198,6 +219,7 @@ namespace LenguajesyAutomatas
             AvanzarPuntero();
             NodoArbol nodoDelaracion = NuevoNodoSentencia(TipoSentencia.ASIGNACION);
             nodoDelaracion.lexema = listToken[Puntero].lexema;
+            lexemaContadorFor = nodoDelaracion.lexema;
             nodoDelaracion.hijoIzquierdo = FactorFor();
 
             return nodoDelaracion;
@@ -266,14 +288,8 @@ namespace LenguajesyAutomatas
         #region Sentencias dentro del for
         private NodoArbol SentenciasFor()
         {
-            if (listToken[Puntero+6].token == -38)
-            {
-                MessageBox.Show("No hay sentencias dentro del for");
-                return new NodoArbol();
-            }
-            AvanzarPuntero(6);
             NodoArbol nodo = InsertNodo();
-
+            
             while (listToken[Puntero].token == -40) //Evalua si el token es un enter para recorrerlos
             {
                 AvanzarPuntero();
@@ -304,7 +320,28 @@ namespace LenguajesyAutomatas
         }
         private NodoArbol IncrementarContador()
         {
-            return new NodoArbol();
+            NodoArbol nodo = NuevoNodoSentencia(TipoSentencia.ASIGNACION);
+            nodo.soyDeTipoExpresion = tipoExpresion.Identificador;
+            nodo.lexema = lexemaContadorFor;
+
+            NodoArbol nodoSumatoria = NuevoNodoSentencia(TipoSentencia.EXPRESION);
+            nodoSumatoria.soyDeTipoExpresion = tipoExpresion.Operador;
+            nodoSumatoria.soyDeTipoOperacion = tipoOperador.Suma;
+            nodoSumatoria.lexema = "+";
+
+            NodoArbol nodoContador = NuevoNodoSentencia(TipoSentencia.EXPRESION);
+            nodoContador.soyDeTipoExpresion = tipoExpresion.Identificador;
+            nodoContador.lexema = lexemaContadorFor;
+
+            NodoArbol nodoUno = NuevoNodoSentencia(TipoSentencia.EXPRESION);
+            nodoUno.soyDeTipoExpresion = tipoExpresion.Constante;
+            nodoUno.lexema = "1";
+
+            nodoSumatoria.hijoIzquierdo = nodoContador;
+            nodoSumatoria.hijoDerecho = nodoUno;
+            nodo.hijoIzquierdo = nodoSumatoria;
+
+            return nodo;
         }
         #endregion
         #endregion   //Falta este
@@ -313,7 +350,9 @@ namespace LenguajesyAutomatas
 
         public NodoArbol CrearArbolCondicional()
         {
+            Puntero--;
             NodoArbol nodoRaiz = CrearArbolExpresion();
+            //Puntero++;
             if (listToken[Puntero].lexema.Equals("==")
                 || listToken[Puntero].lexema.Equals("<=")
                 || listToken[Puntero].lexema.Equals(">=") 
@@ -325,18 +364,23 @@ namespace LenguajesyAutomatas
                 switch (listToken[Puntero].lexema)
                 {
                     case "==":
+                        nodoTemp.lexema = "==";
                         nodoTemp.soyOperacionCondicionaDeTipo = OperacionCondicional.IgualIgual;
                         break;
                     case "<=":
+                        nodoTemp.lexema = "<=";
                         nodoTemp.soyOperacionCondicionaDeTipo = OperacionCondicional.MenorIgualQue;
                         break;
                     case ">=":
+                        nodoTemp.lexema = ">=";
                         nodoTemp.soyOperacionCondicionaDeTipo = OperacionCondicional.MayorIgualQue;
                         break;
                     case ">":
+                        nodoTemp.lexema = ">";
                         nodoTemp.soyOperacionCondicionaDeTipo = OperacionCondicional.MayorQue;
                         break;
                     case "<":
+                        nodoTemp.lexema = "<";
                         nodoTemp.soyOperacionCondicionaDeTipo = OperacionCondicional.MenorQue;
                         break;
                     default:
@@ -410,26 +454,76 @@ namespace LenguajesyAutomatas
         public NodoArbol CrearArbolIF()
         {
             var nodoArbolIF = NuevoNodoSentencia(TipoSentencia.IF);
+            nodoArbolIF.lexema = listToken[Puntero].lexema;
             Puntero += 2;
             nodoArbolIF.hijoIzquierdo = CrearArbolCondicional();
+            Puntero += 4;
+            nodoArbolIF.hijoCentro = InsertNodo();
             Puntero += 2;
-            nodoArbolIF.hijoCentro = CrearArbolSintacticoAbstracto();
-            Puntero++;
-            if (listToken[Puntero].lexema.Equals("Else"))
+
+            while (listToken[Puntero].token == -40) //Evaluta si el token es un enter y recorrerlos
             {
-                Puntero++;
-                if (listToken[Puntero].lexema.Equals("if"))
-                {
-                    CrearArbolIF();
-                }
-                else
-                {
-                    Puntero++;
-                    nodoArbolIF.hijoDerecho = CrearArbolSintacticoAbstracto();
-                }
+                AvanzarPuntero();
             }
 
+            if (listToken[Puntero].token == -1 || listToken[Puntero].token == -102 || listToken[Puntero].token == -125 ||
+                listToken[Puntero].token == -109 || listToken[Puntero].token == -113)
+            {
+                nodoArbolIF.hermano = InsertNodo();
+            }
             return nodoArbolIF;
+        }
+
+        private NodoArbol CrearNodoElse()
+        {
+            NodoArbol nodoElse = NuevoNodoSentencia(TipoSentencia.IF);
+            nodoElse.lexema = listToken[Puntero].lexema;
+            AvanzarPuntero(5);
+
+            while (listToken[Puntero].token == -40) //Evaluta si el token es un enter y recorrerlos
+            {
+                AvanzarPuntero();
+            }
+
+            if (listToken[Puntero].token == -1 || listToken[Puntero].token == -102 || listToken[Puntero].token == -125)
+            {
+                nodoElse.hijoIzquierdo = InsertNodo();
+            }
+            AvanzarPuntero(2);
+            while (listToken[Puntero].token == -40) //Evaluta si el token es un enter y recorrerlos
+            {
+                AvanzarPuntero();
+            }
+            MessageBox.Show(listToken[Puntero].lexema + " " + listToken[Puntero].linea);
+            
+            if (listToken[Puntero].token == -38)
+            {
+                AvanzarPuntero();
+            }
+
+            if (listToken[Puntero].token == -1 || listToken[Puntero].token == -102 || listToken[Puntero].token == -125)
+            {
+                nodoElse.hermano = InsertNodo();
+            }
+
+            return nodoElse;
+        }
+
+        private NodoArbol AgregarElse(NodoArbol nodoHermanoIF, NodoArbol nodoElse)
+        {
+            if (nodoHermanoIF == null)
+            {
+                nodoHermanoIF = nodoElse;
+            }
+            else if (nodoHermanoIF.hermano == null)
+            {
+                nodoHermanoIF.hermano = nodoElse;
+            }
+            else
+            {
+                AgregarElse(nodoHermanoIF.hermano, nodoElse);
+            }
+            return nodoHermanoIF;
         }
         #endregion
 
@@ -507,19 +601,18 @@ namespace LenguajesyAutomatas
                 t.lexema = listToken[Puntero].lexema;
                 Puntero++;
             }
-            if (listToken[Puntero].token == -3)  //float
+            else if (listToken[Puntero].token == -3)  //float
             {
                 t = NuevoNodoExpresion(tipoExpresion.Constante);
                 t.lexema = listToken[Puntero].lexema;
                 t.soyDeTipoDato = TipoDeDato.Decimal;
                 Puntero++;
             }
-
-            else if (listToken[Puntero].token == -1)
+            else if (listToken[Puntero].token == -1) //IDENTIFICADOR
             {
                 t = NuevoNodoExpresion(tipoExpresion.Identificador);
                 t.lexema = listToken[Puntero].lexema;
-                //   t.TipoDato = TablaSimbolos.ObtenerTipoDato(miListaTokenCopia[puntero].Lexema, nodoClaseActiva, nombreMetodoActivo);
+                t.soyDeTipoDato = TipoDeDato.Entero;
                 Puntero++;
             }
             else if (listToken[Puntero].lexema.Equals("("))
@@ -700,6 +793,21 @@ namespace LenguajesyAutomatas
             return TipoDeDato.Vacio;
         }
 
+        private TipoDeDato FuncionEquivalenciaAsignacion(TipoDeDato tipoValorAsignacion, TipoDeDato tipoValorHijoIzquierdo)
+        {
+            if (tipoValorHijoIzquierdo != TipoDeDato.Vacio)
+            {
+                if (tipoValorAsignacion == TipoDeDato.Entero && tipoValorHijoIzquierdo == TipoDeDato.Entero) return TipoDeDato.Entero;
+                else if (tipoValorAsignacion == TipoDeDato.Decimal && tipoValorHijoIzquierdo == TipoDeDato.Entero) return TipoDeDato.Decimal;
+                else if (tipoValorAsignacion == TipoDeDato.Decimal && tipoValorHijoIzquierdo == TipoDeDato.Decimal) return TipoDeDato.Decimal;
+                else if (tipoValorAsignacion == TipoDeDato.Booleano && tipoValorHijoIzquierdo == TipoDeDato.Booleano) return TipoDeDato.Booleano;
+                else if (tipoValorAsignacion == TipoDeDato.Cadena && tipoValorHijoIzquierdo == TipoDeDato.Cadena) return TipoDeDato.Cadena;
+                else if (tipoValorAsignacion == TipoDeDato.Caracter && tipoValorHijoIzquierdo == TipoDeDato.Caracter) return TipoDeDato.Caracter;
+                else
+                    throw new Exception(string.Format("Error de tipos no se puede realizar la asignación {0} con {1} ", tipoValorAsignacion, tipoValorHijoIzquierdo));
+            }
+            return TipoDeDato.Vacio;
+        }
         public TipoDeDato VerificacionTipos(NodoArbol miArbol)
         {
             if (miArbol.soySentenciaDeTipo == TipoSentencia.ASIGNACION)
@@ -729,7 +837,11 @@ namespace LenguajesyAutomatas
             }
             else if (miArbol.soySentenciaDeTipo == TipoSentencia.ASIGNACION)
             {
+/*<<<<<<< HEAD
                 return FuncionEquivalenciaDeDatos(miArbol.soyDeTipoDato, miArbol.tipoValorHijoIzquierdo, miArbol.soyOperacionCondicionaDeTipo);
+=======
+                return FuncionEquivalenciaAsignacion(miArbol.soyDeTipoDato, miArbol.tipoValorHijoIzquierdo);
+>>>>>>> 73e872b6b46d3d13b9a6b215abe95a43afce608e*/
             }
 
             return TipoDeDato.Vacio;
@@ -757,3 +869,4 @@ namespace LenguajesyAutomatas
 
     }
 }
+    

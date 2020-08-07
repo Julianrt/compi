@@ -26,29 +26,29 @@ namespace LenguajesyAutomatas
 
         private void nuevoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
-            contadorPaginascreadas ++;
+
+            contadorPaginascreadas++;
 
             TabPage TP = new TabPage();
             tabControl1.TabPages.Add(TP);
             TP.BackColor = Color.White;
             EditorTexto et = new EditorTexto();
-            et.Name = "editorTexto"+contadorPaginascreadas;
+            et.Name = "editorTexto" + contadorPaginascreadas;
             TP.Controls.Add(et);
-            TP.Name = "tabPage"+contadorPaginascreadas;
+            TP.Name = "tabPage" + contadorPaginascreadas;
         }
 
         private void guardarToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string nombreTabpageseleccionada = tabControl1.SelectedTab.Name.ToString();
             string indiceparacontroleditort = nombreTabpageseleccionada.Substring(nombreTabpageseleccionada.Length - 1, 1);
-            
+
             var controles = tabControl1.Controls.OfType<TabPage>().Where(x => x.Name.StartsWith(nombreTabpageseleccionada));
 
             foreach (var ctrl in controles)
             {
                 var controleseditor = ctrl.Controls.OfType<EditorTexto>().Where(x => x.Name.StartsWith("editorTexto" + indiceparacontroleditort));
-         
+
                 foreach (var ctrleditor in controleseditor)
                 {
 
@@ -56,7 +56,7 @@ namespace LenguajesyAutomatas
 
                 }
             }
-            
+
         }
 
         private void abrirToolStripMenuItem_Click(object sender, EventArgs e)
@@ -95,7 +95,7 @@ namespace LenguajesyAutomatas
                 foreach (var ctrleditor in controleseditor)
                 {
                     string codigofuente = ctrleditor.Texto();
-                    Lexico _lex = new Lexico();                    
+                    Lexico _lex = new Lexico();
                     if (codigofuente.Length > 0)
                     {
                         dgvListaTokens.DataSource = _lex.EjecutarLexico(codigofuente);
@@ -127,12 +127,14 @@ namespace LenguajesyAutomatas
                     Sintactico _sin = new Sintactico();
                     if (codigofuente.Length > 0)
                     {
+
+
                         List<Token> lista = new List<Token>();
                         List<Token> listaTablaSimbolo = new List<Token>();
                         //var ObjArbol = new Arboles(MiLi)
                         lista = _lex.EjecutarLexico(codigofuente);
                         int[] Tokensparasintactico = new int[500];
-                        string [] lexemaParaSintactico = new string[500];
+                        string[] lexemaParaSintactico = new string[500];
                         int cantidaddetokens = 0, ubicacion = 0;
                         for (int i = 0; i < lista.Count; i++)
                         {
@@ -178,6 +180,13 @@ namespace LenguajesyAutomatas
                 }
             }
 
+        }
+
+        private void validacionDeTiposToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            /*ValidacionDeTipos VT = new ValidacionDeTipos();
+            ValidacionDeTipos.ComprobacionDeTipos = Arboles.Arbol();
+            VT.VerificacionTipos(NodoArbol);*/
         }
     }
 }
