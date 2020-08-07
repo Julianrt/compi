@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace LenguajesyAutomatas
 {
 	#region Enums
 	public enum TipoNodoArbol
 	{
-		Expresion,Sentencia,Condicional,Nada
+		Expresion,
+        Sentencia,
+        Condicional,
+        Nada
 	}
-
     public enum TipoSentencia
     {
         IF,
@@ -53,7 +56,6 @@ namespace LenguajesyAutomatas
         NADA
     }
     #endregion
-
     public class NodoArbol
     {
         public NodoArbol hijoIzquierdo;
@@ -82,6 +84,16 @@ namespace LenguajesyAutomatas
         public string valor;
         public string pCode;
         public string type;
+
+        public static NodoArbol GetEmptyNode()
+        {
+            NodoArbol node = new NodoArbol();
+            node.hijoIzquierdo = new NodoArbol();
+            node.hijoDerecho = new NodoArbol();
+            node.hijoCentro = new NodoArbol();
+            node.hermano = new NodoArbol();
+            return node;
+        }
     }
     class Arboles
 	{
@@ -89,29 +101,212 @@ namespace LenguajesyAutomatas
         //CREAR Arbol de FOR        
         //CREAR Arbol de LEER
         //CREAR Arbol de Escribir
-        // crear varios arboles unidos con hermanos 
-
+        // crear varios arboles unidos con hermanos
+        private string claseActual;
+        private string metodoActual;
         public int Puntero;
-        public List<Token> miListaTokenCopia;
+        public List<Token> listToken;
+        private NodoArbol root;
 
         public Arboles (List<Token> listaDeTokens)
         {
             Puntero = 0;
-            this.miListaTokenCopia = listaDeTokens;
+            this.listToken = listaDeTokens;
         }
 
         public NodoArbol CrearArbolSintacticoAbstracto()
         {
-            return CrearArbolAsignacion();
+            NodoArbol nodo = InsertNodo();
+            if (root == nodo) { }
+            return nodo;
+        }
+
+        private NodoArbol InsertNodo()
+        {
+            NodoArbol nodo = new NodoArbol();
+            if (Puntero < listToken.Count-1)
+            {
+
+                switch (listToken[Puntero].token)
+                {
+                    case -127: //CLASE
+                        claseActual = listToken[Puntero + 1].lexema;
+                        AvanzarPuntero(6);
+                        InsertNodo();
+                        break;
+
+                    case -101: //METODO
+                        metodoActual = listToken[Puntero + 1].lexema;
+                        AvanzarPuntero(6);
+                        InsertNodo();
+                        break;
+
+                    case -1: //ASIGNACION
+                        nodo = CrearArbolAsignacion();
+                        root = nodo;
+                        break;
+
+                    case -102: //IF
+                        nodo = CrearArbolIF();
+                        root = nodo;
+                        break;
+
+                    case -125: //FOR
+                        nodo = CrearArbolFor();
+                        root = nodo;
+                        break;
+
+                    default:
+                        AvanzarPuntero();
+                        InsertNodo();
+                        break;
+                }
+            }
+            return nodo;
         }
 
         #region Crear Arbol FOR 
 
         private NodoArbol CrearArbolFor()
         {
-            throw new NotImplementedException();
+            NodoArbol nodoFor = NuevoNodoSentencia(TipoSentencia.FOR);
+            nodoFor.lexema = listToken[Puntero].lexema;
+            nodoFor.hijoIzquierdo = DeclaracionFor();
+            nodoFor.hijoCentro = ValidacionFor();
+            //MessageBox.Show(listToken[Puntero].lexema);
+            nodoFor.hijoDerecho = SentenciasFor();
+            nodoFor.hijoDerecho = SentenciaIncrementoFor(nodoFor.hijoDerecho);
+
+            AvanzarPuntero(8);
+
+            while (listToken[Puntero].token == -40) //Evaluta si el token es un enter y recorrerlos
+            {
+                AvanzarPuntero();
+            }
+
+            if (listToken[Puntero].token == -1 || listToken[Puntero].token == -102 || listToken[Puntero].token == -125)
+            {
+                nodoFor.hermano = InsertNodo();
+            }
+
+            return nodoFor;
         }
 
+        #region Declaración del for
+        private NodoArbol DeclaracionFor()
+        {
+            AvanzarPuntero();
+            NodoArbol nodoDelaracion = NuevoNodoSentencia(TipoSentencia.ASIGNACION);
+            nodoDelaracion.lexema = listToken[Puntero].lexema;
+            nodoDelaracion.hijoIzquierdo = FactorFor();
+
+            return nodoDelaracion;
+        }
+        private NodoArbol FactorFor()
+        {
+            AvanzarPuntero(4);
+            NodoArbol nodoFactorFor = NuevoNodoSentencia(TipoSentencia.EXPRESION);
+            nodoFactorFor.lexema = listToken[Puntero].lexema;
+            nodoFactorFor.soyDeTipoExpresion = tipoExpresion.Constante;
+
+            if (listToken[Puntero+1].token == -32) //Coma
+            {
+                if (listToken[Puntero].token == -1)
+                {
+                    nodoFactorFor.soyDeTipoExpresion = tipoExpresion.Identificador;
+                    nodoFactorFor.soyDeTipoDato = TipoDeDato.SinEspecificar;
+                }
+                else if (listToken[Puntero].token == -2)
+                {
+                    nodoFactorFor.soyDeTipoDato = TipoDeDato.Entero;
+                } 
+                else if (listToken[Puntero].token == -3)
+                {
+                    nodoFactorFor.soyDeTipoDato = TipoDeDato.Decimal;
+                }
+            }
+            else if (listToken[Puntero+1].token == -34) //Parentesis
+            {
+                nodoFactorFor.lexema = "0";
+                nodoFactorFor.soyDeTipoDato = TipoDeDato.Entero;
+            }
+            return nodoFactorFor;
+        }
+        #endregion
+        #region Validación del for
+        private NodoArbol ValidacionFor()
+        {
+            NodoArbol nodoValidacionFor = NuevoNodoSentencia(TipoSentencia.EXPRESION);
+            nodoValidacionFor.soyDeTipoExpresion = tipoExpresion.OperadorLogico;
+            nodoValidacionFor.lexema = "<";
+            nodoValidacionFor.hijoIzquierdo = FactorComparacionFor();
+            nodoValidacionFor.hijoDerecho = FactorComparacionFor();
+
+            return nodoValidacionFor;
+        }
+        private NodoArbol FactorComparacionFor()
+        {
+            AvanzarPuntero();
+            NodoArbol nodoFactorFor = NuevoNodoSentencia(TipoSentencia.EXPRESION);
+            nodoFactorFor.soyTipoNodo = TipoNodoArbol.Expresion;
+            nodoFactorFor.soyDeTipoExpresion = tipoExpresion.Identificador;
+            nodoFactorFor.soyDeTipoDato = TipoDeDato.Entero;
+
+            if (listToken[Puntero].token == -32 || listToken[Puntero].token == -34)
+            {
+                nodoFactorFor.lexema = listToken[Puntero - 5].lexema;
+            }
+            else if (listToken[Puntero-1].token == -32)
+            {
+                nodoFactorFor.lexema = listToken[Puntero].lexema;
+            }
+            return nodoFactorFor;
+        }
+        #endregion
+        #region Sentencias dentro del for
+        private NodoArbol SentenciasFor()
+        {
+            if (listToken[Puntero+6].token == -38)
+            {
+                MessageBox.Show("No hay sentencias dentro del for");
+                return new NodoArbol();
+            }
+            AvanzarPuntero(6);
+            NodoArbol nodo = InsertNodo();
+
+            while (listToken[Puntero].token == -40) //Evalua si el token es un enter para recorrerlos
+            {
+                AvanzarPuntero();
+            }
+
+            if (listToken[Puntero].token == -1 || listToken[Puntero].token == -102 || listToken[Puntero].token == -125)
+            {
+                nodo.hermano = InsertNodo();
+            }
+
+            return nodo;
+        }
+        private NodoArbol SentenciaIncrementoFor(NodoArbol nodo)
+        {
+            if (nodo.lexema == null)
+            {
+                nodo = IncrementarContador();
+            }
+            else if (nodo.hermano == null)
+            {
+                nodo.hermano = IncrementarContador();
+            }
+            else
+            {
+                SentenciaIncrementoFor(nodo.hermano);
+            }
+            return nodo;
+        }
+        private NodoArbol IncrementarContador()
+        {
+            return new NodoArbol();
+        }
+        #endregion
         #endregion   //Falta este
 
         #region Crear Arbol Condicional
@@ -119,15 +314,15 @@ namespace LenguajesyAutomatas
         public NodoArbol CrearArbolCondicional()
         {
             NodoArbol nodoRaiz = CrearArbolExpresion();
-            if (miListaTokenCopia[Puntero].lexema.Equals("==")
-                || miListaTokenCopia[Puntero].lexema.Equals("<=")
-                || miListaTokenCopia[Puntero].lexema.Equals(">=") 
-                || miListaTokenCopia[Puntero].lexema.Equals(">")
-                || miListaTokenCopia[Puntero].lexema.Equals("<"))
+            if (listToken[Puntero].lexema.Equals("==")
+                || listToken[Puntero].lexema.Equals("<=")
+                || listToken[Puntero].lexema.Equals(">=") 
+                || listToken[Puntero].lexema.Equals(">")
+                || listToken[Puntero].lexema.Equals("<"))
             {
                 NodoArbol nodoTemp = NuevoNodoCondicional();
 
-                switch (miListaTokenCopia[Puntero].lexema)
+                switch (listToken[Puntero].lexema)
                 {
                     case "==":
                         nodoTemp.soyOperacionCondicionaDeTipo = OperacionCondicional.IgualIgual;
@@ -175,7 +370,6 @@ namespace LenguajesyAutomatas
             nodo.tipoValorHijoIzquierdo = TipoDeDato.Vacio;
             return nodo;
         }
-
         public NodoArbol NuevoNodoSentencia(TipoSentencia tipoSentencia)
         {
             NodoArbol nodo = new NodoArbol();
@@ -221,10 +415,10 @@ namespace LenguajesyAutomatas
             Puntero += 2;
             nodoArbolIF.hijoCentro = CrearArbolSintacticoAbstracto();
             Puntero++;
-            if (miListaTokenCopia[Puntero].lexema.Equals("Else"))
+            if (listToken[Puntero].lexema.Equals("Else"))
             {
                 Puntero++;
-                if (miListaTokenCopia[Puntero].lexema.Equals("if"))
+                if (listToken[Puntero].lexema.Equals("if"))
                 {
                     CrearArbolIF();
                 }
@@ -237,38 +431,44 @@ namespace LenguajesyAutomatas
 
             return nodoArbolIF;
         }
-
-
         #endregion
 
         #region Crear ARBOL ASIGNACION
-
         public NodoArbol CrearArbolAsignacion()
         {
             var sentenciaAsignacion = NuevoNodoSentencia(TipoSentencia.ASIGNACION);
-            sentenciaAsignacion.lexema = miListaTokenCopia[Puntero].lexema;
+            sentenciaAsignacion.lexema = listToken[Puntero].lexema;
             Puntero += 2;
             sentenciaAsignacion.hijoIzquierdo = CrearArbolExpresion();
+            AvanzarPuntero();
+
+            while (listToken[Puntero].token==-40) //Evaluta si el token es un enter y recorrerlos
+            {
+                AvanzarPuntero();
+            }
+
+            if (listToken[Puntero].token==-1 || listToken[Puntero].token==-102 || listToken[Puntero].token == -125)
+            {
+                sentenciaAsignacion.hermano = InsertNodo();
+            }
             return sentenciaAsignacion;
         }
-
-
         #endregion
 
         #region Arbol de Expresion
         public NodoArbol CrearArbolExpresion()
         {
             NodoArbol nodoRaiz = Termino();
-            while (miListaTokenCopia[Puntero].lexema.Equals("+")
-                || miListaTokenCopia[Puntero].lexema.Equals("-"))
+            while (listToken[Puntero].lexema.Equals("+")
+                || listToken[Puntero].lexema.Equals("-"))
             {
                 NodoArbol nodoTemp = NuevoNodoExpresion(tipoExpresion.Operador);
                 nodoTemp.hijoIzquierdo = nodoRaiz;
                 nodoTemp.soyDeTipoOperacion =
-                    miListaTokenCopia[Puntero].lexema.Equals("+")
+                    listToken[Puntero].lexema.Equals("+")
                     ? tipoOperador.Suma
                     : tipoOperador.Resta;
-                nodoTemp.lexema = miListaTokenCopia[Puntero].lexema;
+                nodoTemp.lexema = listToken[Puntero].lexema;
                 nodoRaiz = nodoTemp;
                 Puntero++;
                 nodoRaiz.hijoDerecho = Termino();
@@ -280,15 +480,15 @@ namespace LenguajesyAutomatas
         private NodoArbol Termino()
         {
             NodoArbol t = Factor();
-            while (miListaTokenCopia[Puntero].lexema.Equals("*")
-                 || miListaTokenCopia[Puntero].lexema.Equals("/"))
+            while (listToken[Puntero].lexema.Equals("*")
+                 || listToken[Puntero].lexema.Equals("/"))
             {
                 NodoArbol p = NuevoNodoExpresion(tipoExpresion.Operador);
                 p.hijoIzquierdo = t;
-                p.soyDeTipoOperacion = miListaTokenCopia[Puntero].lexema.Equals("*")
+                p.soyDeTipoOperacion = listToken[Puntero].lexema.Equals("*")
                     ? tipoOperador.Multiplicacion
                     : tipoOperador.Division;
-                t.lexema = miListaTokenCopia[Puntero].lexema;
+                t.lexema = listToken[Puntero].lexema;
                 t = p;
                 Puntero++;
                 t.hijoDerecho = Factor();
@@ -300,29 +500,29 @@ namespace LenguajesyAutomatas
         {
             NodoArbol t = new NodoArbol();
 
-            if (miListaTokenCopia[Puntero].token == -2) //ENTERO
+            if (listToken[Puntero].token == -2) //ENTERO
             {
                 t = NuevoNodoExpresion(tipoExpresion.Constante);
                 t.soyDeTipoDato = TipoDeDato.Entero;
-                t.lexema = miListaTokenCopia[Puntero].lexema;
+                t.lexema = listToken[Puntero].lexema;
                 Puntero++;
             }
-            if (miListaTokenCopia[Puntero].token == -3)  //float
+            if (listToken[Puntero].token == -3)  //float
             {
                 t = NuevoNodoExpresion(tipoExpresion.Constante);
-                t.lexema = miListaTokenCopia[Puntero].lexema;
+                t.lexema = listToken[Puntero].lexema;
                 t.soyDeTipoDato = TipoDeDato.Decimal;
                 Puntero++;
             }
 
-            else if (miListaTokenCopia[Puntero].token == -1)
+            else if (listToken[Puntero].token == -1)
             {
                 t = NuevoNodoExpresion(tipoExpresion.Identificador);
-                t.lexema = miListaTokenCopia[Puntero].lexema;
+                t.lexema = listToken[Puntero].lexema;
                 //   t.TipoDato = TablaSimbolos.ObtenerTipoDato(miListaTokenCopia[puntero].Lexema, nodoClaseActiva, nombreMetodoActivo);
                 Puntero++;
             }
-            else if (miListaTokenCopia[Puntero].lexema.Equals("("))
+            else if (listToken[Puntero].lexema.Equals("("))
             {
                 Puntero++;
                 t = CrearArbolExpresion();
@@ -354,7 +554,7 @@ namespace LenguajesyAutomatas
 
         private NodoArbol ObtenerSiguienteArbol()
         {
-            switch (miListaTokenCopia[Puntero].token)
+            switch (listToken[Puntero].token)
             {
                 case -102: //if
                     return CrearArbolIF();
@@ -377,13 +577,13 @@ namespace LenguajesyAutomatas
         public NodoArbol SimpleExpresion()
         {
             NodoArbol nodoRaiz = Termino();
-            while (miListaTokenCopia[Puntero].lexema.Equals("+") || miListaTokenCopia[Puntero].lexema.Equals("-"))
+            while (listToken[Puntero].lexema.Equals("+") || listToken[Puntero].lexema.Equals("-"))
             {
                 NodoArbol nodoTemp = NuevoNodoExpresion(tipoExpresion.Operador);
                 nodoTemp.hijoIzquierdo = nodoRaiz;
-                nodoTemp.soyOperacionCondicionaDeTipo = miListaTokenCopia[Puntero].lexema.Equals("+") ? OperacionCondicional.Suma : OperacionCondicional.Resta;
+                nodoTemp.soyOperacionCondicionaDeTipo = listToken[Puntero].lexema.Equals("+") ? OperacionCondicional.Suma : OperacionCondicional.Resta;
 
-                nodoTemp.lexema = miListaTokenCopia[Puntero].lexema;
+                nodoTemp.lexema = listToken[Puntero].lexema;
 
                 nodoRaiz = nodoTemp;
                 Puntero++;
@@ -418,25 +618,25 @@ namespace LenguajesyAutomatas
                     if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Entero;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Decimal;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Decimal && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Decimal;
-                    else
+                    /*else
                         throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
-                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));*/
                     break;
                 case OperacionCondicional.Multiplicacion:
                     if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Entero;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Decimal;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Decimal && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Decimal;
-                    else
+                    /*else
                         throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
-                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));*/
                     break;
                 case OperacionCondicional.Division:
                     if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Decimal;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Decimal;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Decimal && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Decimal;
-                    else
+                   /* else
                         throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
-                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));*/
                     break;
 
 
@@ -448,9 +648,9 @@ namespace LenguajesyAutomatas
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Cadena && tipoValorHijoDerecho == TipoDeDato.Cadena) return TipoDeDato.Booleano;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Booleano && tipoValorHijoDerecho == TipoDeDato.Booleano) return TipoDeDato.Booleano;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Caracter && tipoValorHijoDerecho == TipoDeDato.Caracter) return TipoDeDato.Booleano;
-                    else
+                   /* else
                         throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
-                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));*/
                     break;
                 case OperacionCondicional.Diferente:
                     if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
@@ -459,41 +659,41 @@ namespace LenguajesyAutomatas
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Cadena && tipoValorHijoDerecho == TipoDeDato.Cadena) return TipoDeDato.Booleano;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Booleano && tipoValorHijoDerecho == TipoDeDato.Booleano) return TipoDeDato.Booleano;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Caracter && tipoValorHijoDerecho == TipoDeDato.Caracter) return TipoDeDato.Booleano;
-                    else
+                    /*else
                         throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
-                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));*/
                     break;
                 case OperacionCondicional.MayorQue:
                     if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Booleano;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Decimal && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
-                    else
+                    /*else
                         throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
-                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));*/
                     break;
                 case OperacionCondicional.MayorIgualQue:
                     if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Booleano;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Decimal && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
-                    else
+                    /*else
                         throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
-                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));*/
                     break;
                 case OperacionCondicional.MenorQue:
                     if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Booleano;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Decimal && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
-                    else
+                    /*else
                         throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
-                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));*/
                     break;
                 case OperacionCondicional.MenorIgualQue:
                     if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Booleano;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Decimal && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
-                    else
+                    /*else
                         throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
-                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));*/
                     break;
 
             }
@@ -529,13 +729,30 @@ namespace LenguajesyAutomatas
             }
             else if (miArbol.soySentenciaDeTipo == TipoSentencia.ASIGNACION)
             {
-                return FuncionEquivalenciaDeDatos(miArbol.soyDeTipoDato, miArbol.tipoValorHijoIzquierdo);
+                return FuncionEquivalenciaDeDatos(miArbol.soyDeTipoDato, miArbol.tipoValorHijoIzquierdo, miArbol.soyOperacionCondicionaDeTipo);
             }
 
             return TipoDeDato.Vacio;
         }
 
-
+        private bool AvanzarPuntero()
+        {
+            if (Puntero < listToken.Count-1)
+            {
+                Puntero++;
+                return true;
+            }
+            return false;
+        }
+        private bool AvanzarPuntero(int salto)
+        {
+            if (Puntero+salto < listToken.Count-1)
+            {
+                Puntero += salto;
+                return true;
+            }
+            return false;
+        }
 
 
     }

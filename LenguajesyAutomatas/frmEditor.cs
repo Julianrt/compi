@@ -166,6 +166,9 @@ namespace LenguajesyAutomatas
                         {
                             dgvTablaSimbolo.DataSource = TablaSimbolos.ObtenerListaClases();
                         }
+
+                        Arboles arbolSintactico = new Arboles(listaTablaSimbolo);
+                        arbolSintactico.CrearArbolSintacticoAbstracto();
                     }
                     else
                     {
