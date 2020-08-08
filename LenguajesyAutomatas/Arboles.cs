@@ -186,7 +186,10 @@ namespace LenguajesyAutomatas
             nodoFor.hijoCentro = ValidacionFor();
             AvanzarPuntero(6);
 
-            while (listToken[Puntero].token == -40) //Evaluta si el token es un enter y recorrerlos
+            nodoFor.hijoIzquierdo.soyDeTipoDato = VerificacionTipos(nodoFor.hijoIzquierdo);
+            VerificacionTipos(nodoFor.hijoCentro);
+
+            while (listToken[Puntero].token == -40) //Evalua si el token es un enter y recorrerlos
             {
                 AvanzarPuntero();
             }
@@ -365,22 +368,32 @@ namespace LenguajesyAutomatas
                 {
                     case "==":
                         nodoTemp.lexema = "==";
+                        nodoTemp.soyDeTipoExpresion = tipoExpresion.OperadorLogico;
                         nodoTemp.soyOperacionCondicionaDeTipo = OperacionCondicional.IgualIgual;
+                        break;
+                    case "!=":
+                        nodoTemp.lexema = "!=";
+                        nodoTemp.soyDeTipoExpresion = tipoExpresion.OperadorLogico;
+                        nodoTemp.soyOperacionCondicionaDeTipo = OperacionCondicional.Diferente;
                         break;
                     case "<=":
                         nodoTemp.lexema = "<=";
+                        nodoTemp.soyDeTipoExpresion = tipoExpresion.OperadorLogico;
                         nodoTemp.soyOperacionCondicionaDeTipo = OperacionCondicional.MenorIgualQue;
                         break;
                     case ">=":
                         nodoTemp.lexema = ">=";
+                        nodoTemp.soyDeTipoExpresion = tipoExpresion.OperadorLogico;
                         nodoTemp.soyOperacionCondicionaDeTipo = OperacionCondicional.MayorIgualQue;
                         break;
                     case ">":
                         nodoTemp.lexema = ">";
+                        nodoTemp.soyDeTipoExpresion = tipoExpresion.OperadorLogico;
                         nodoTemp.soyOperacionCondicionaDeTipo = OperacionCondicional.MayorQue;
                         break;
                     case "<":
                         nodoTemp.lexema = "<";
+                        nodoTemp.soyDeTipoExpresion = tipoExpresion.OperadorLogico;
                         nodoTemp.soyOperacionCondicionaDeTipo = OperacionCondicional.MenorQue;
                         break;
                     default:
@@ -458,8 +471,20 @@ namespace LenguajesyAutomatas
             Puntero += 2;
             nodoArbolIF.hijoIzquierdo = CrearArbolCondicional();
             Puntero += 4;
-            nodoArbolIF.hijoCentro = InsertNodo();
+            MessageBox.Show(listToken[Puntero].lexema+" "+listToken[Puntero].linea);
+            while (listToken[Puntero].token == -40) //Evaluta si el token es un enter y recorrerlos
+            {
+                AvanzarPuntero();
+            }
+            if (listToken[Puntero].token == -1 || listToken[Puntero].token == -102 || listToken[Puntero].token == -125)
+            {
+                nodoArbolIF.hijoDerecho = InsertNodo();
+            }
+
             Puntero += 2;
+            MessageBox.Show(listToken[Puntero].lexema + " " + listToken[Puntero].linea);
+
+            VerificacionTipos(nodoArbolIF.hijoIzquierdo);
 
             while (listToken[Puntero].token == -40) //Evaluta si el token es un enter y recorrerlos
             {
@@ -471,6 +496,7 @@ namespace LenguajesyAutomatas
             {
                 nodoArbolIF.hermano = InsertNodo();
             }
+
             return nodoArbolIF;
         }
 
@@ -536,6 +562,9 @@ namespace LenguajesyAutomatas
             sentenciaAsignacion.hijoIzquierdo = CrearArbolExpresion();
             AvanzarPuntero();
 
+
+            sentenciaAsignacion.soyDeTipoDato = VerificacionTipos(sentenciaAsignacion);
+
             while (listToken[Puntero].token==-40) //Evaluta si el token es un enter y recorrerlos
             {
                 AvanzarPuntero();
@@ -545,6 +574,7 @@ namespace LenguajesyAutomatas
             {
                 sentenciaAsignacion.hermano = InsertNodo();
             }
+
             return sentenciaAsignacion;
         }
         #endregion
@@ -558,10 +588,10 @@ namespace LenguajesyAutomatas
             {
                 NodoArbol nodoTemp = NuevoNodoExpresion(tipoExpresion.Operador);
                 nodoTemp.hijoIzquierdo = nodoRaiz;
-                nodoTemp.soyDeTipoOperacion =
+                nodoTemp.soyOperacionCondicionaDeTipo =
                     listToken[Puntero].lexema.Equals("+")
-                    ? tipoOperador.Suma
-                    : tipoOperador.Resta;
+                    ? OperacionCondicional.Suma
+                    : OperacionCondicional.Resta;
                 nodoTemp.lexema = listToken[Puntero].lexema;
                 nodoRaiz = nodoTemp;
                 Puntero++;
@@ -579,9 +609,9 @@ namespace LenguajesyAutomatas
             {
                 NodoArbol p = NuevoNodoExpresion(tipoExpresion.Operador);
                 p.hijoIzquierdo = t;
-                p.soyDeTipoOperacion = listToken[Puntero].lexema.Equals("*")
-                    ? tipoOperador.Multiplicacion
-                    : tipoOperador.Division;
+                p.soyOperacionCondicionaDeTipo = listToken[Puntero].lexema.Equals("*")
+                    ? OperacionCondicional.Multiplicacion
+                    : OperacionCondicional.Division;
                 t.lexema = listToken[Puntero].lexema;
                 t = p;
                 Puntero++;
@@ -593,8 +623,14 @@ namespace LenguajesyAutomatas
         private NodoArbol Factor()
         {
             NodoArbol t = new NodoArbol();
-
-            if (listToken[Puntero].token == -2) //ENTERO
+            if (listToken[Puntero].token == -1) //IDENTIFICADOR
+            {
+                t = NuevoNodoExpresion(tipoExpresion.Identificador);
+                t.lexema = listToken[Puntero].lexema;
+                //t.soyDeTipoDato = TipoDeDato.Entero;
+                Puntero++;
+            }
+            else if (listToken[Puntero].token == -2) //ENTERO
             {
                 t = NuevoNodoExpresion(tipoExpresion.Constante);
                 t.soyDeTipoDato = TipoDeDato.Entero;
@@ -608,11 +644,11 @@ namespace LenguajesyAutomatas
                 t.soyDeTipoDato = TipoDeDato.Decimal;
                 Puntero++;
             }
-            else if (listToken[Puntero].token == -1) //IDENTIFICADOR
+            else if (listToken[Puntero].token == -4)  //CADENA
             {
-                t = NuevoNodoExpresion(tipoExpresion.Identificador);
+                t = NuevoNodoExpresion(tipoExpresion.Constante);
                 t.lexema = listToken[Puntero].lexema;
-                t.soyDeTipoDato = TipoDeDato.Entero;
+                t.soyDeTipoDato = TipoDeDato.Cadena;
                 Puntero++;
             }
             else if (listToken[Puntero].lexema.Equals("("))
@@ -703,34 +739,59 @@ namespace LenguajesyAutomatas
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Decimal && tipoValorHijoDerecho == TipoDeDato.Cadena) return TipoDeDato.Cadena;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Cadena && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Cadena;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Caracter && tipoValorHijoDerecho == TipoDeDato.Cadena) return TipoDeDato.Cadena;
-
                     else
-                        throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
-                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                    {
+                        ErrorSemanticoDGV error = new ErrorSemanticoDGV();
+                        error.Mensaje = "No se puede sumar un " + tipoValorHijoIzquierdo.ToString() + " con un " + tipoValorHijoDerecho.ToString();
+                        TablaSimbolos.ListaErroresSemanticos.Add(error);
+                        return TipoDeDato.Error;
+                    }
+                        /*throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));*/
                 case OperacionCondicional.Resta:
                     if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Entero;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Decimal;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Decimal && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Decimal;
+                    else
+                    {
+                        ErrorSemanticoDGV error = new ErrorSemanticoDGV();
+                        error.Mensaje = "No se puede restar un " + tipoValorHijoIzquierdo.ToString() + " con un " + tipoValorHijoDerecho.ToString();
+                        TablaSimbolos.ListaErroresSemanticos.Add(error);
+                        return TipoDeDato.Error;
+                    }
                     /*else
                         throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
                             soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));*/
-                    break;
+                    
                 case OperacionCondicional.Multiplicacion:
                     if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Entero;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Decimal;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Decimal && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Decimal;
+                    else
+                    {
+                        ErrorSemanticoDGV error = new ErrorSemanticoDGV();
+                        error.Mensaje = "No se puede multiplicar un " + tipoValorHijoIzquierdo.ToString() + " con un " + tipoValorHijoDerecho.ToString();
+                        TablaSimbolos.ListaErroresSemanticos.Add(error);
+                        return TipoDeDato.Error;
+                    }
                     /*else
                         throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
                             soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));*/
-                    break;
+                   
                 case OperacionCondicional.Division:
                     if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Decimal;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Decimal;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Decimal && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Decimal;
-                   /* else
-                        throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
-                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));*/
-                    break;
+                    else
+                    {
+                        ErrorSemanticoDGV error = new ErrorSemanticoDGV();
+                        error.Mensaje = "No se puede dividir un " + tipoValorHijoIzquierdo.ToString() + " con un " + tipoValorHijoDerecho.ToString();
+                        TablaSimbolos.ListaErroresSemanticos.Add(error);
+                        return TipoDeDato.Error;
+                    }
+                    /*throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                    break;*/
 
 
                 //logicas
@@ -741,10 +802,16 @@ namespace LenguajesyAutomatas
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Cadena && tipoValorHijoDerecho == TipoDeDato.Cadena) return TipoDeDato.Booleano;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Booleano && tipoValorHijoDerecho == TipoDeDato.Booleano) return TipoDeDato.Booleano;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Caracter && tipoValorHijoDerecho == TipoDeDato.Caracter) return TipoDeDato.Booleano;
-                   /* else
-                        throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
-                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));*/
-                    break;
+                    else
+                    {
+                        ErrorSemanticoDGV error = new ErrorSemanticoDGV();
+                        error.Mensaje = "No se puede comparar si un " + tipoValorHijoIzquierdo.ToString() + " es igual que " + tipoValorHijoDerecho.ToString();
+                        TablaSimbolos.ListaErroresSemanticos.Add(error);
+                        return TipoDeDato.Error;
+                    }
+                    /*throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                    break;*/
                 case OperacionCondicional.Diferente:
                     if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Booleano;
@@ -752,42 +819,72 @@ namespace LenguajesyAutomatas
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Cadena && tipoValorHijoDerecho == TipoDeDato.Cadena) return TipoDeDato.Booleano;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Booleano && tipoValorHijoDerecho == TipoDeDato.Booleano) return TipoDeDato.Booleano;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Caracter && tipoValorHijoDerecho == TipoDeDato.Caracter) return TipoDeDato.Booleano;
-                    /*else
-                        throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
-                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));*/
-                    break;
+                    else
+                    {
+                        ErrorSemanticoDGV error = new ErrorSemanticoDGV();
+                        error.Mensaje = "No se puede comparar si un " + tipoValorHijoIzquierdo.ToString() + " es diferente que " + tipoValorHijoDerecho.ToString();
+                        TablaSimbolos.ListaErroresSemanticos.Add(error);
+                        return TipoDeDato.Error;
+                    }
+                    /*throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                    break;*/
                 case OperacionCondicional.MayorQue:
                     if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Booleano;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Decimal && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
-                    /*else
-                        throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
-                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));*/
-                    break;
+                    else
+                    {
+                        ErrorSemanticoDGV error = new ErrorSemanticoDGV();
+                        error.Mensaje = "No se puede comparar un " + tipoValorHijoIzquierdo.ToString() + " si es mayor que " + tipoValorHijoDerecho.ToString();
+                        TablaSimbolos.ListaErroresSemanticos.Add(error);
+                        return TipoDeDato.Error;
+                    }
+                    /*throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                    break;*/
                 case OperacionCondicional.MayorIgualQue:
                     if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Booleano;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Decimal && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
-                    /*else
-                        throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
-                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));*/
-                    break;
+                    else
+                    {
+                        ErrorSemanticoDGV error = new ErrorSemanticoDGV();
+                        error.Mensaje = "No se puede comparar si un " + tipoValorHijoIzquierdo.ToString() + " es mayor o igual que " + tipoValorHijoDerecho.ToString();
+                        TablaSimbolos.ListaErroresSemanticos.Add(error);
+                        return TipoDeDato.Error;
+                    }
+                    /*throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                    break;*/
                 case OperacionCondicional.MenorQue:
                     if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Booleano;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Decimal && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
-                    /*else
-                        throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
-                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));*/
-                    break;
+                    else
+                    {
+                        ErrorSemanticoDGV error = new ErrorSemanticoDGV();
+                        error.Mensaje = "No se puede comparar si un " + tipoValorHijoIzquierdo.ToString() + " es menor que " + tipoValorHijoDerecho.ToString();
+                        TablaSimbolos.ListaErroresSemanticos.Add(error);
+                        return TipoDeDato.Error;
+                    }
+                    /*throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                    break;*/
                 case OperacionCondicional.MenorIgualQue:
                     if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Entero && tipoValorHijoDerecho == TipoDeDato.Decimal) return TipoDeDato.Booleano;
                     else if (tipoValorHijoIzquierdo == TipoDeDato.Decimal && tipoValorHijoDerecho == TipoDeDato.Entero) return TipoDeDato.Booleano;
-                    /*else
-                        throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
-                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));*/
-                    break;
+                    else
+                    {
+                        ErrorSemanticoDGV error = new ErrorSemanticoDGV();
+                        error.Mensaje = "No se puede comparar si un " + tipoValorHijoIzquierdo.ToString() + " es menor o igual que " + tipoValorHijoDerecho.ToString();
+                        TablaSimbolos.ListaErroresSemanticos.Add(error);
+                        return TipoDeDato.Error;
+                    }
+                    /*throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
+                            soyOperacion, tipoValorHijoIzquierdo, tipoValorHijoDerecho));
+                    break;*/
 
             }
             return TipoDeDato.Vacio;
@@ -808,26 +905,23 @@ namespace LenguajesyAutomatas
             }
             return TipoDeDato.Vacio;
         }
+
         public TipoDeDato VerificacionTipos(NodoArbol miArbol)
         {
-            if (miArbol.soySentenciaDeTipo == TipoSentencia.ASIGNACION)
-
-            if ((miArbol.soySentenciaDeTipo != TipoSentencia.IF) &&
-                (miArbol.hijoIzquierdo != null)) miArbol.tipoValorHijoIzquierdo = VerificacionTipos(miArbol.hijoIzquierdo);
-
-
-            if ((miArbol.soySentenciaDeTipo != TipoSentencia.IF) &&
-                (miArbol.hijoDerecho != null)) miArbol.tipoValorHijoDerecho = VerificacionTipos(miArbol.hijoDerecho);
-
-            if (miArbol.soyDeTipoExpresion == tipoExpresion.Operador)
+            if (miArbol.hijoIzquierdo != null)
             {
-                return FuncionEquivalenciaDeDatos(miArbol.tipoValorHijoIzquierdo, miArbol.tipoValorHijoDerecho, miArbol.soyOperacionCondicionaDeTipo);
+                miArbol.tipoValorHijoIzquierdo = VerificacionTipos(miArbol.hijoIzquierdo);
             }
-            else if (miArbol.soyDeTipoExpresion == tipoExpresion.OperadorLogico)
+            if (miArbol.hijoCentro != null)
             {
-                return FuncionEquivalenciaDeDatos(miArbol.tipoValorHijoIzquierdo, miArbol.tipoValorHijoDerecho, miArbol.soyOperacionCondicionaDeTipo);
+
             }
-            else if (miArbol.soyDeTipoExpresion == tipoExpresion.Constante)
+            if (miArbol.hijoDerecho != null)
+            {
+                miArbol.tipoValorHijoDerecho = VerificacionTipos(miArbol.hijoDerecho);
+            }
+
+            if (miArbol.soyDeTipoExpresion == tipoExpresion.Constante)
             {
                 return miArbol.soyDeTipoDato;
             }
@@ -835,13 +929,19 @@ namespace LenguajesyAutomatas
             {
                 return miArbol.soyDeTipoDato;
             }
+            else if (miArbol.soyDeTipoExpresion == tipoExpresion.Operador)
+            {
+                return FuncionEquivalenciaDeDatos(miArbol.tipoValorHijoIzquierdo, miArbol.tipoValorHijoDerecho, miArbol.soyOperacionCondicionaDeTipo);
+            }
+            else if (miArbol.soyDeTipoExpresion == tipoExpresion.OperadorLogico)
+            {
+                return FuncionEquivalenciaDeDatos(miArbol.tipoValorHijoIzquierdo, miArbol.tipoValorHijoDerecho, miArbol.soyOperacionCondicionaDeTipo);
+            }
             else if (miArbol.soySentenciaDeTipo == TipoSentencia.ASIGNACION)
             {
-/*<<<<<<< HEAD
-                return FuncionEquivalenciaDeDatos(miArbol.soyDeTipoDato, miArbol.tipoValorHijoIzquierdo, miArbol.soyOperacionCondicionaDeTipo);
-=======
-                return FuncionEquivalenciaAsignacion(miArbol.soyDeTipoDato, miArbol.tipoValorHijoIzquierdo);
->>>>>>> 73e872b6b46d3d13b9a6b215abe95a43afce608e*/
+                //return FuncionEquivalenciaDeDatos(miArbol.soyDeTipoDato, miArbol.tipoValorHijoIzquierdo, miArbol.soyOperacionCondicionaDeTipo);
+                //return FuncionEquivalenciaAsignacion(miArbol.soyDeTipoDato, miArbol.tipoValorHijoIzquierdo);
+                return miArbol.tipoValorHijoIzquierdo;
             }
 
             return TipoDeDato.Vacio;

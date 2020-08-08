@@ -160,6 +160,9 @@ namespace LenguajesyAutomatas
                         dgvTablaSimbolo.DataSource = null;
                         dgvTablaSimbolo.Rows.Clear();
 
+                        Arboles arbolSintactico = new Arboles(listaTablaSimbolo);
+                        arbolSintactico.CrearArbolSintacticoAbstracto();
+
                         if (TablaSimbolos.ListaErroresSemanticos.Count > 0)
                         {
                             dgvErrores.DataSource = TablaSimbolos.ListaErroresSemanticos;
@@ -169,8 +172,7 @@ namespace LenguajesyAutomatas
                             dgvTablaSimbolo.DataSource = TablaSimbolos.ObtenerListaClases();
                         }
 
-                        Arboles arbolSintactico = new Arboles(listaTablaSimbolo);
-                        arbolSintactico.CrearArbolSintacticoAbstracto();
+                        
                     }
                     else
                     {
