@@ -182,32 +182,32 @@ namespace LenguajesyAutomatas
         {
             NodoArbol nodoFor = NuevoNodoSentencia(TipoSentencia.FOR);
             nodoFor.lexema = listToken[Puntero].lexema;
+
             nodoFor.hijoIzquierdo = DeclaracionFor();
-            nodoFor.hijoCentro = ValidacionFor();
-            AvanzarPuntero(6);
-
             nodoFor.hijoIzquierdo.soyDeTipoDato = VerificacionTipos(nodoFor.hijoIzquierdo);
+
+            nodoFor.hijoCentro = ValidacionFor(nodoFor.hijoIzquierdo);
             VerificacionTipos(nodoFor.hijoCentro);
+            
+            AvanzarPuntero(6); //Nos movemos a las sentencias dentro del FOR
 
-            while (listToken[Puntero].token == -40) //Evalua si el token es un enter y recorrerlos
+
+            while (listToken[Puntero].token == -40) //Saltar enter si hay
             {
                 AvanzarPuntero();
             }
-            if (listToken[Puntero].token == -38) //Si el token es la llave de cierre }
+            if (listToken[Puntero].token == -1 || listToken[Puntero].token == -102 || listToken[Puntero].token == -125)
             {
-                return null;
+                nodoFor.hijoDerecho = SentenciasFor();
             }
+            nodoFor.hijoDerecho = SentenciaIncrementoFor(nodoFor.hijoDerecho, nodoFor.hijoIzquierdo);
 
-            nodoFor.hijoDerecho = SentenciasFor();
-            nodoFor.hijoDerecho = SentenciaIncrementoFor(nodoFor.hijoDerecho);
+            AvanzarPuntero(2); //Nos movemos a la sig sentencia AFUERA del FOR
 
-            AvanzarPuntero(2);
-
-            while (listToken[Puntero].token == -40) //Evaluta si el token es un enter y recorrerlos
+            while (listToken[Puntero].token == -40) //Saltar enter si hay
             {
                 AvanzarPuntero();
             }
-
             if (listToken[Puntero].token == -1 || listToken[Puntero].token == -102 || listToken[Puntero].token == -125)
             {
                 nodoFor.hermano = InsertNodo();
@@ -259,19 +259,19 @@ namespace LenguajesyAutomatas
         }
         #endregion
         #region Validación del for
-        private NodoArbol ValidacionFor()
+        private NodoArbol ValidacionFor(NodoArbol nodoCondator)
         {
             NodoArbol nodoValidacionFor = NuevoNodoSentencia(TipoSentencia.EXPRESION);
             nodoValidacionFor.soyDeTipoExpresion = tipoExpresion.OperadorLogico;
             nodoValidacionFor.lexema = "<";
-            nodoValidacionFor.hijoIzquierdo = FactorComparacionFor();
+            nodoValidacionFor.hijoIzquierdo = nodoCondator;
             nodoValidacionFor.hijoDerecho = FactorComparacionFor();
 
             return nodoValidacionFor;
         }
         private NodoArbol FactorComparacionFor()
         {
-            AvanzarPuntero();
+            AvanzarPuntero(2);
             NodoArbol nodoFactorFor = NuevoNodoSentencia(TipoSentencia.EXPRESION);
             nodoFactorFor.soyTipoNodo = TipoNodoArbol.Expresion;
             nodoFactorFor.soyDeTipoExpresion = tipoExpresion.Identificador;
@@ -305,26 +305,27 @@ namespace LenguajesyAutomatas
 
             return nodo;
         }
-        private NodoArbol SentenciaIncrementoFor(NodoArbol nodo)
+        private NodoArbol SentenciaIncrementoFor(NodoArbol nodo, NodoArbol nodoContador)
         {
-            if (nodo.lexema == null)
+            if (nodo == null)
             {
-                nodo = IncrementarContador();
+                nodo = IncrementarContador(nodoContador);
             }
             else if (nodo.hermano == null)
             {
-                nodo.hermano = IncrementarContador();
+                nodo.hermano = IncrementarContador(nodoContador);
             }
             else
             {
-                SentenciaIncrementoFor(nodo.hermano);
+                SentenciaIncrementoFor(nodo.hermano, nodoContador);
             }
             return nodo;
         }
-        private NodoArbol IncrementarContador()
+        private NodoArbol IncrementarContador(NodoArbol nodoContador)
         {
             NodoArbol nodo = NuevoNodoSentencia(TipoSentencia.ASIGNACION);
             nodo.soyDeTipoExpresion = tipoExpresion.Identificador;
+            nodo.soyDeTipoDato = nodoContador.soyDeTipoDato;
             nodo.lexema = lexemaContadorFor;
 
             NodoArbol nodoSumatoria = NuevoNodoSentencia(TipoSentencia.EXPRESION);
@@ -332,12 +333,13 @@ namespace LenguajesyAutomatas
             nodoSumatoria.soyDeTipoOperacion = tipoOperador.Suma;
             nodoSumatoria.lexema = "+";
 
-            NodoArbol nodoContador = NuevoNodoSentencia(TipoSentencia.EXPRESION);
+            /*NodoArbol nodoContador = NuevoNodoSentencia(TipoSentencia.EXPRESION);
             nodoContador.soyDeTipoExpresion = tipoExpresion.Identificador;
-            nodoContador.lexema = lexemaContadorFor;
+            nodoContador.lexema = lexemaContadorFor;*/
 
             NodoArbol nodoUno = NuevoNodoSentencia(TipoSentencia.EXPRESION);
             nodoUno.soyDeTipoExpresion = tipoExpresion.Constante;
+            nodoUno.soyDeTipoDato = TipoDeDato.Entero;
             nodoUno.lexema = "1";
 
             nodoSumatoria.hijoIzquierdo = nodoContador;
@@ -469,10 +471,13 @@ namespace LenguajesyAutomatas
             var nodoArbolIF = NuevoNodoSentencia(TipoSentencia.IF);
             nodoArbolIF.lexema = listToken[Puntero].lexema;
             Puntero += 2;
+
             nodoArbolIF.hijoIzquierdo = CrearArbolCondicional();
+            VerificacionTipos(nodoArbolIF.hijoIzquierdo);
+
             Puntero += 4;
-            MessageBox.Show(listToken[Puntero].lexema+" "+listToken[Puntero].linea);
-            while (listToken[Puntero].token == -40) //Evaluta si el token es un enter y recorrerlos
+            
+            while (listToken[Puntero].token == -40) //Evalua si el token es un enter y recorrerlos  HIJO DERECHO(SENTENCIAS DENTRO DEL IF)
             {
                 AvanzarPuntero();
             }
@@ -481,12 +486,9 @@ namespace LenguajesyAutomatas
                 nodoArbolIF.hijoDerecho = InsertNodo();
             }
 
-            Puntero += 2;
-            MessageBox.Show(listToken[Puntero].lexema + " " + listToken[Puntero].linea);
+            Puntero += 2;            
 
-            VerificacionTipos(nodoArbolIF.hijoIzquierdo);
-
-            while (listToken[Puntero].token == -40) //Evaluta si el token es un enter y recorrerlos
+            while (listToken[Puntero].token == -40) //Evalua si el token es un enter y recorrerlos  HERMANOS
             {
                 AvanzarPuntero();
             }
@@ -565,7 +567,7 @@ namespace LenguajesyAutomatas
 
             sentenciaAsignacion.soyDeTipoDato = VerificacionTipos(sentenciaAsignacion);
 
-            while (listToken[Puntero].token==-40) //Evaluta si el token es un enter y recorrerlos
+            while (listToken[Puntero].token==-40) //Evalua si el token es un enter y recorrerlos
             {
                 AvanzarPuntero();
             }

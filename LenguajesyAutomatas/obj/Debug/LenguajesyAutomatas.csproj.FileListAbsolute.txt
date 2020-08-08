@@ -111,7 +111,6 @@ C:\Users\ahora\Desktop\verano compi\git\compi\LenguajesyAutomatas\obj\Debug\Leng
 C:\Users\Julián\Documents\COMPI\compi\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.exe.config
 C:\Users\Julián\Documents\COMPI\compi\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.exe
 C:\Users\Julián\Documents\COMPI\compi\LenguajesyAutomatas\bin\Debug\LenguajesyAutomatas.pdb
-C:\Users\Julián\Documents\COMPI\compi\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csprojAssemblyReference.cache
 C:\Users\Julián\Documents\COMPI\compi\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.EditorTexto.resources
 C:\Users\Julián\Documents\COMPI\compi\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.frmEditor.resources
 C:\Users\Julián\Documents\COMPI\compi\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.Properties.Resources.resources
@@ -130,3 +129,4 @@ C:\Users\isaac\Desktop\compi\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.c
 C:\Users\isaac\Desktop\compi\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csproj.CoreCompileInputs.cache
 C:\Users\isaac\Desktop\compi\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.exe
 C:\Users\isaac\Desktop\compi\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.pdb
+C:\Users\Julián\Documents\COMPI\compi\LenguajesyAutomatas\obj\Debug\LenguajesyAutomatas.csprojAssemblyReference.cache

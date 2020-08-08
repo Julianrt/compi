@@ -1,0 +1,11 @@
+C:\Users\Julián\Documents\COMPI\compi\LenguajesyAutomatas\bin\Release\LenguajesyAutomatas.exe.config
+C:\Users\Julián\Documents\COMPI\compi\LenguajesyAutomatas\bin\Release\LenguajesyAutomatas.exe
+C:\Users\Julián\Documents\COMPI\compi\LenguajesyAutomatas\bin\Release\LenguajesyAutomatas.pdb
+C:\Users\Julián\Documents\COMPI\compi\LenguajesyAutomatas\obj\Release\LenguajesyAutomatas.csprojAssemblyReference.cache
+C:\Users\Julián\Documents\COMPI\compi\LenguajesyAutomatas\obj\Release\LenguajesyAutomatas.EditorTexto.resources
+C:\Users\Julián\Documents\COMPI\compi\LenguajesyAutomatas\obj\Release\LenguajesyAutomatas.frmEditor.resources
+C:\Users\Julián\Documents\COMPI\compi\LenguajesyAutomatas\obj\Release\LenguajesyAutomatas.Properties.Resources.resources
+C:\Users\Julián\Documents\COMPI\compi\LenguajesyAutomatas\obj\Release\LenguajesyAutomatas.csproj.GenerateResource.cache
+C:\Users\Julián\Documents\COMPI\compi\LenguajesyAutomatas\obj\Release\LenguajesyAutomatas.csproj.CoreCompileInputs.cache
+C:\Users\Julián\Documents\COMPI\compi\LenguajesyAutomatas\obj\Release\LenguajesyAutomatas.exe
+C:\Users\Julián\Documents\COMPI\compi\LenguajesyAutomatas\obj\Release\LenguajesyAutomatas.pdb
